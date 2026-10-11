@@ -1,0 +1,1354 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Database pembelajaran permesinan kelistrikan kapal: simulator starter motor, bank soal 1–90, peta lingkup, dan referensi. Disusun oleh Rafael Sukirno, CE.">
+<title>Electrical Shipboard Machinery · Learning Database</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Orbitron:wght@600;800&family=Share+Tech+Mono&display=swap">
+<style>
+:root{
+  --bg:#06182c; --panel:#0a2540; --panel2:#0d3156; --deep:#08243f; --line:#1f4f80;
+  --tx:#e8f1fa; --mu:#9bb9d6; --cy:#35d0ff; --gd:#f2b84b;
+  --ok:#35e08a; --bad:#ff5d5d; --am:#f2a93b;
+  --f-disp:"Orbitron","Barlow Condensed",system-ui,sans-serif;
+  --f-ui:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"Share Tech Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:10px; --r-sm:8px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 var(--f-body);min-height:100vh}
+body.lock,html.lock{overflow:hidden}
+h1,h2,h3,h4{margin:0;text-wrap:balance}
+p{margin:0}
+a{color:var(--cy)}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
+:focus-visible{outline:3px solid var(--gd);outline-offset:2px}
+img,svg{max-width:100%;height:auto;display:block}
+.wrap{max-width:1080px;margin-inline:auto;padding-inline:16px}
+.skip{position:absolute;left:-999px;top:0;background:var(--gd);color:#06182c;padding:8px 12px;z-index:60;border-radius:0 0 8px 0}
+.skip:focus{left:8px}
+[hidden]{display:none!important}
+
+/* ---------- Navbar ---------- */
+.top{position:sticky;top:0;z-index:30;background:rgba(6,24,44,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:4px 18px;padding-block:8px}
+.brand{display:flex;flex-direction:column;text-align:left;min-width:0;padding:4px 0}
+.brand b{font:800 .9rem/1.1 var(--f-disp);letter-spacing:.04em;color:var(--tx)}
+.brand span{font:600 .85rem/1.2 var(--f-ui);letter-spacing:.08em;color:var(--gd);text-transform:uppercase}
+.nav{display:flex;gap:2px;overflow-x:auto;flex:1 1 100%;min-width:0;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.nav::-webkit-scrollbar{display:none}
+@media(min-width:900px){.nav{flex:1 1 auto;justify-content:flex-end}}
+.nv{flex:0 0 auto;padding:10px 14px;min-height:44px;font:600 1.02rem/1 var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--mu);border-bottom:3px solid transparent}
+.nv:hover{color:var(--tx)}
+.nv[aria-current="page"]{color:var(--cy);border-bottom-color:var(--cy)}
+
+/* ---------- Umum ---------- */
+.page{padding-bottom:40px}
+.page[hidden]{display:none!important}
+.sec{padding-block:26px}
+.kick{font:600 .95rem/1.2 var(--f-ui);letter-spacing:.14em;text-transform:uppercase;color:var(--cy)}
+.h2{font:800 1.25rem/1.25 var(--f-disp);letter-spacing:.02em}
+.lead{max-width:62ch;color:var(--mu);font-size:1.02rem}
+.hd{display:flex;flex-direction:column;gap:8px;padding-block:28px 6px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:10px 20px;border-radius:var(--r-sm);border:1px solid var(--line);background:var(--panel2);font:700 1.05rem/1 var(--f-ui);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:var(--tx);transition:border-color .15s,background .15s,filter .15s}
+.btn:hover{border-color:var(--cy)}
+.btn.gold{background:var(--gd);border-color:var(--gd);color:#06182c}
+.btn.gold:hover{filter:brightness(1.08)}
+.btn.sm{min-height:40px;padding:8px 14px;font-size:.95rem}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+
+/* ---------- Beranda ---------- */
+.hero{padding-block:34px 18px;display:flex;flex-direction:column;gap:14px}
+.hero h1{font:800 clamp(1.4rem,4.8vw,2.4rem)/1.2 var(--f-disp);letter-spacing:.01em;max-width:24ch}
+.by{font:600 1.2rem/1.2 var(--f-ui);letter-spacing:.06em;color:var(--gd)}
+.by small{color:var(--mu);font-size:.95rem;letter-spacing:.04em;font-weight:500}
+.vessel{font:.9rem/1.4 var(--f-mono);color:var(--mu)}
+.lens{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.lens>div{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.lens h3{font:700 1.2rem/1.2 var(--f-ui);letter-spacing:.06em;text-transform:uppercase}
+.lens p{color:var(--mu);font-size:.95rem}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:baseline}
+.d-P{background:var(--cy)}.d-K{background:var(--gd)}.d-S{background:var(--bad)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.tile{text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0;transition:border-color .15s,background .15s}
+.tile:hover{border-color:var(--cy);background:var(--panel2)}
+.tile b{font:700 1.25rem/1.2 var(--f-ui);letter-spacing:.05em;text-transform:uppercase;color:var(--cy)}
+.tile span{color:var(--mu);font-size:.93rem}
+
+/* ---------- Tutorial ---------- */
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:10px;counter-reset:st}
+.steps li{counter-increment:st;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.steps li::before{content:counter(st);grid-row:span 3;align-self:start;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--cy);color:#06182c;font:800 .95rem/1 var(--f-disp)}
+.steps h3{font:700 1.2rem/1.2 var(--f-ui);letter-spacing:.04em}
+.steps p{color:var(--mu);font-size:.95rem}
+.steps .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.9rem;color:var(--mu)}
+.legend i{display:inline-block;width:26px;height:4px;border-radius:2px;margin-right:6px;vertical-align:middle}
+
+/* ---------- Bank soal ---------- */
+.tools{display:flex;flex-direction:column;gap:10px;padding-block:14px}
+.srch{width:100%;max-width:520px;min-height:46px;padding:10px 14px;border-radius:var(--r-sm);border:1px solid var(--line);background:var(--deep);color:var(--tx);font:1rem var(--f-body)}
+.srch::placeholder{color:var(--mu)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:8px 14px;min-height:40px;font:600 1rem/1 var(--f-ui);letter-spacing:.04em;color:var(--mu);transition:color .15s,border-color .15s,background .15s}
+.chip:hover{color:var(--tx);border-color:var(--cy)}
+.chip[aria-pressed="true"]{background:var(--cy);border-color:var(--cy);color:#06182c}
+.prog{font:.95rem var(--f-mono);color:var(--mu)}
+.cat{margin-top:18px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.cat h3{font:700 1.3rem/1.2 var(--f-ui);letter-spacing:.06em;text-transform:uppercase}
+.cat span{color:var(--mu);font-size:.9rem}
+.qgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:10px;margin-top:10px}
+.qcard{text-align:left;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;min-width:0;transition:border-color .15s,background .15s}
+.qcard:hover{border-color:var(--cy);background:var(--panel2)}
+.qn{font:800 1.05rem/1.3 var(--f-disp);color:var(--gd);min-width:2.2ch}
+.qt{font-size:.98rem;line-height:1.4}
+.qm{grid-column:2;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:.82rem;color:var(--mu)}
+.qcard.isdone .qn::after{content:" ✓";color:var(--ok);font-size:.8em}
+.empty{padding:26px 0;color:var(--mu)}
+
+/* ---------- Lingkup & referensi ---------- */
+.gbox{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin-top:12px}
+.gbox h3{font:700 1.25rem/1.2 var(--f-ui);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.gbox>p{color:var(--mu);font-size:.93rem;margin-bottom:10px;max-width:70ch}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:10px;margin-top:10px}
+.rlink{display:flex;flex-direction:column;gap:3px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;text-decoration:none;color:var(--tx);min-width:0;transition:border-color .15s,background .15s}
+.rlink:hover{border-color:var(--cy);background:var(--panel2)}
+.rlink b{font:700 1.15rem/1.2 var(--f-ui);letter-spacing:.04em;color:var(--cy)}
+.rlink span{color:var(--mu);font-size:.88rem}
+
+/* ---------- Popup ---------- */
+.modal{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center}
+.modal[hidden]{display:none!important}
+.mbk{position:absolute;inset:0;background:rgba(2,10,20,.82);backdrop-filter:blur(2px)}
+.mbox{position:relative;width:100%;max-width:740px;max-height:92vh;overflow-y:auto;background:var(--panel);border:1px solid var(--line);border-radius:14px 14px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px;overscroll-behavior:contain}
+@media(min-width:760px){.modal{align-items:center;padding:16px}.mbox{border-radius:12px;max-height:90vh;padding:22px}}
+.mx{position:absolute;top:8px;right:8px;width:44px;height:44px;border-radius:var(--r-sm);border:1px solid var(--line);background:var(--panel2);font-size:1.3rem;line-height:1}
+.mx:hover{border-color:var(--cy)}
+.mk{font:600 .95rem/1.2 var(--f-ui);letter-spacing:.1em;text-transform:uppercase;color:var(--gd);padding-right:52px}
+.mt{font:700 1.2rem/1.35 var(--f-body);padding-right:46px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{display:inline-flex;align-items:center;font:600 .9rem/1 var(--f-ui);letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--mu)}
+.flow{font:.92rem/1.5 var(--f-mono);background:var(--deep);border-left:4px solid var(--cy);border-radius:6px;padding:10px 12px;color:var(--tx);overflow-wrap:anywhere;white-space:pre-wrap}
+.mb{display:flex;flex-direction:column;gap:10px;max-width:66ch}
+.mb p{color:var(--tx);white-space:pre-wrap}
+.mh{font:700 1.1rem/1.2 var(--f-ui);letter-spacing:.08em;text-transform:uppercase;color:var(--cy);margin-bottom:6px}
+.pts{margin:0;padding-left:1.2em;display:grid;gap:4px;color:var(--mu)}
+.lk{display:flex;flex-wrap:wrap;gap:8px}
+.lk a{display:inline-flex;align-items:center;min-height:42px;padding:8px 14px;border-radius:var(--r-sm);border:1px solid var(--line);background:var(--deep);text-decoration:none;color:var(--tx);font:600 1rem/1 var(--f-ui);letter-spacing:.04em;transition:border-color .15s,color .15s}
+.lk a:hover{border-color:var(--cy);color:var(--cy)}
+.lk a::after{content:" ↗";color:var(--mu);font-size:.85em;margin-left:4px}
+.lkh{font:.82rem var(--f-ui);letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin:8px 0 6px}
+.mf{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px}
+.chk{display:inline-flex;align-items:center;gap:8px;min-height:44px;font:600 1rem var(--f-ui);letter-spacing:.04em;cursor:pointer}
+.chk input{width:22px;height:22px;accent-color:var(--ok)}
+.mnav{display:flex;gap:8px}
+
+/* ---------- Footer ---------- */
+.foot{border-top:1px solid var(--line);margin-top:20px}
+.foot .wrap{padding-block:20px;display:flex;flex-direction:column;gap:4px;color:var(--mu);font-size:.88rem}
+.foot b{font:700 1.15rem/1.2 var(--f-ui);letter-spacing:.06em;color:var(--gd)}
+
+/* ---------- Simulator ---------- */
+.sim{--pn:#0d3156;--pn2:#08243f;--ln:#1f4f80;--tx:#e8f1fa;--mu:#8fb0cf;--ok:#35e08a;--bad:#ff4d4d;--am:#f2a93b;--bl:#4aa8ff;padding-block:12px 4px}
+.sim .tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px}
+.sim .tabs button{flex:0 0 auto;background:#12406d;border-radius:var(--r-sm);color:#fff;font:700 1.02rem/1 var(--f-ui);letter-spacing:.05em;text-transform:uppercase;min-height:44px;padding:8px 16px;transition:background .15s}
+.sim .tabs button.act{background:#2a8bd8;box-shadow:inset 0 -3px 0 #fff}
+.sim-desc{font-size:.95rem;color:var(--tx);background:var(--pn);border:1px solid var(--ln);border-radius:var(--r);padding:12px 14px}
+.sim-grid{display:grid;gap:12px;margin-top:12px}
+@media(min-width:800px){.sim-grid{grid-template-columns:1fr 1fr}.sim-grid .full{grid-column:1/-1}}
+.sim .card{background:var(--pn);border:1px solid var(--ln);border-radius:var(--r);padding:12px;min-width:0}
+.sim .card h3{font:700 1.1rem/1.2 var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--bl);margin-bottom:8px}
+.sim svg{width:100%;height:auto;display:block}
+.sim .w{stroke:#4d6f90;stroke-width:3;fill:none;stroke-linecap:round;transition:stroke .12s}
+.sim .w.v{stroke:var(--am)}
+.sim .w.hot{stroke:var(--ok);stroke-dasharray:6 6}
+.sim .sym{stroke:#7f9bb5;stroke-width:3;fill:none;stroke-linecap:round;transition:stroke .12s}
+.sim .sym.on{stroke:var(--ok)}
+.sim .cmp{fill:transparent;stroke:transparent;cursor:pointer;transition:stroke .12s,fill .12s}
+.sim .cmp.grp{stroke:#6f95ba;stroke-dasharray:4 3}
+.sim .cmp:hover,.sim .cmp.sel{stroke:var(--bl);stroke-dasharray:none;fill:rgba(74,168,255,.14)}
+.sim .cmp:focus-visible{stroke:#fff;stroke-dasharray:none;outline:none}
+.sim svg text{fill:var(--tx);font-size:11px}
+.sim svg text.m{fill:var(--mu);font-size:10px}
+.sim .mu{color:var(--mu)}
+.sim p.mu{font-size:.85rem}
+.sim .ctl{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.sim .ctl button{border-radius:var(--r-sm);padding:12px 8px;color:#fff;font:700 1.02rem/1.1 var(--f-ui);letter-spacing:.04em;text-transform:uppercase;min-height:48px;touch-action:manipulation;user-select:none;transition:transform .06s,background .15s}
+.sim .ctl button:active{transform:scale(.96)}
+.sim .b-on{background:#2a6fb0}.sim .b-start{background:#1e9e5a}.sim .b-stop{background:#d93636}.sim .b-trip{background:#d98a14}.sim .b-rst{background:#4b5f75}
+.sim .ctl button.held{background:#fff!important;color:#073;box-shadow:0 0 0 3px var(--ok)}
+.sim .badge{display:inline-block;padding:3px 12px;border-radius:6px;font-weight:700;letter-spacing:.05em}
+.sim .s-stop{background:#51606f}.sim .s-run{background:#1e9e5a}.sim .s-trip{background:#d93636}.sim .s-off{background:#2d3a48}
+.sim .lamps{display:flex;gap:14px;margin:6px 0 10px;flex-wrap:wrap}
+.sim .lp{display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;color:var(--mu);letter-spacing:.05em}
+.sim .lp i{width:16px;height:16px;border-radius:50%;background:#2d3a48;border:2px solid #6f95ba;display:block;transition:background .15s,box-shadow .15s}
+.sim .lp.g i{background:#35e08a;border-color:#fff;box-shadow:0 0 10px #35e08a}
+.sim .lp.r i{background:#ff4d4d;border-color:#fff;box-shadow:0 0 10px #ff4d4d}
+.sim .lp.y i{background:#f2a93b;border-color:#fff;box-shadow:0 0 10px #f2a93b}
+.sim .lp.g,.sim .lp.r,.sim .lp.y{color:var(--tx)}
+.sim .gd{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0;text-align:center}
+.sim .gd div{background:var(--pn2);border-radius:var(--r-sm);padding:8px 4px;min-width:0}
+.sim .gd b{display:block;font:1rem var(--f-mono)}
+.sim .gd span{font-size:.72rem;color:var(--mu)}
+.sim .bar{height:10px;background:var(--pn2);border-radius:6px;overflow:hidden;margin:6px 0}
+.sim .bar i{display:block;height:100%;width:0;background:var(--am);transition:width .12s}
+.sim table{width:100%;border-collapse:collapse;font-size:.85rem}
+.sim th,.sim td{padding:7px 6px;border-bottom:1px solid var(--ln);text-align:left;vertical-align:top}
+.sim th{color:var(--mu);font-weight:600}
+.sim tr.r{cursor:pointer}
+.sim tr.r:hover,.sim tr.r.sel{background:rgba(74,168,255,.15)}
+.sim .tw{overflow-x:auto}
+.sim ol{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.sim ol li{padding:8px 10px;border-radius:var(--r-sm);background:var(--pn2);border-left:5px solid #3a5878;color:var(--mu);font-size:.88rem;transition:border-color .15s,background .15s,color .15s}
+.sim ol li.on{border-color:var(--ok);color:var(--tx);background:#0d3a35}
+.sim ol li.bad{border-color:var(--bad);color:var(--tx);background:#4a1a22}
+.sim #info{background:var(--pn2);border-radius:var(--r-sm);padding:10px;font-size:.9rem;min-height:60px}
+.sim #log{padding:8px;background:#041629;border-radius:var(--r-sm);font:12px/1.5 var(--f-mono);height:110px;overflow:auto;color:#9fd2ff}
+.btn:disabled{opacity:.4;cursor:default;pointer-events:none}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Lewati ke konten</a>
+
+<header class="top">
+  <div class="wrap">
+    <button class="brand" data-go="home" aria-label="Ke beranda">
+      <b>ESS · MACHINERY</b><span>Rafael Sukirno, CE</span>
+    </button>
+    <nav class="nav" aria-label="Navigasi utama" id="nav">
+      <button class="nv" data-go="home">Beranda</button>
+      <button class="nv" data-go="tutorial">Tutorial</button>
+      <button class="nv" data-go="simulator">Simulator</button>
+      <button class="nv" data-go="soal">Bank Soal</button>
+      <button class="nv" data-go="lingkup">Peta Lingkup</button>
+      <button class="nv" data-go="referensi">Referensi</button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ================= BERANDA ================= -->
+<section class="page" id="p-home">
+  <div class="wrap">
+    <div class="hero">
+      <p class="kick">Electronical Shipboard System · materi taruna</p>
+      <h1>Electrical Shipboard Machinery Learning Database</h1>
+      <p class="lead">Simulator starter motor yang bisa dijalankan, ditambah bank soal 1–90: dari dasar kelistrikan kapal, mesin engine room, sampai peralatan navigasi anjungan seperti steering, ECDIS, kompas, dan GPS. Setiap soal punya popup penjelasan dan tautan ke Google, YouTube, Wikipedia, IMO, SOLAS, MARPOL, dan class.</p>
+      <div class="cta">
+        <button class="btn gold" data-go="simulator" data-sim="dol">Mulai simulator</button>
+        <button class="btn" data-go="soal">Buka bank soal</button>
+        <button class="btn" data-go="tutorial">Baca tutorial</button>
+      </div>
+      <p class="by">Dibuat oleh Rafael Sukirno, CE <small>· Marine Engineering Instructor</small></p>
+      <p class="vessel">Kapal acuan: MV Baabullah, bulk carrier 50.000 DWT</p>
+    </div>
+
+    <div class="sec">
+      <h2 class="h2">Tiga lensa untuk membaca mesin kapal</h2>
+      <p class="lead" style="margin-block:6px 14px">Setiap soal ditandai dengan lensa yang dipakai, supaya taruna membedakan daya, perintah, dan perlindungan.</p>
+      <div class="lens">
+        <div><h3><span class="dot d-P"></span>Electrical Power</h3><p>Energi yang menggerakkan dan mensuplai: generator, MSB, feeder, starter, motor.</p></div>
+        <div><h3><span class="dot d-K"></span>Control / Electronic</h3><p>Bagaimana sistem diperintah: tombol, relay, timer, sensor, PLC, BMS.</p></div>
+        <div><h3><span class="dot d-S"></span>Safety System</h3><p>Bagaimana sistem melindungi manusia dan kapal: proteksi, interlock, alarm, shutdown.</p></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2 class="h2">Isi aplikasi</h2>
+      <div class="tiles" style="margin-top:12px">
+        <button class="tile" data-go="tutorial"><b>Tutorial</b><span>Lima langkah memakai simulator, dari START sampai trip overload.</span></button>
+        <button class="tile" data-go="simulator"><b>Simulator</b><span>DOL, Star-Delta, Forward-Reverse, dan Sequence 2 Motor dengan diagram yang hidup.</span></button>
+        <button class="tile" data-go="soal"><b>Bank Soal 1–90</b><span>90 soal dengan jawaban, submateri, alur daya, dan tautan referensi.</span></button>
+        <button class="tile" data-go="lingkup"><b>Peta Lingkup</b><span>Permesinan engine room, dek, steering, anjungan, akomodasi, kelistrikan, dan LSA/FFA.</span></button>
+        <button class="tile" data-go="referensi"><b>Referensi</b><span>IMO, IACS, class society, dan pencarian cepat ke semua sumber.</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TUTORIAL ================= -->
+<section class="page" id="p-tutorial" hidden>
+  <div class="wrap">
+    <div class="hd">
+      <p class="kick">Tutorial</p>
+      <h2 class="h2">Memakai simulator dalam lima langkah</h2>
+      <p class="lead">Panel sudah hidup (QF1 ON) saat simulator dibuka. Ikuti urutan ini, lalu coba di tab lain.</p>
+    </div>
+    <ol class="steps" style="margin-top:14px">
+      <li><h3>Pilih jenis starter</h3><p>Di halaman Simulator ada empat tab: DOL, Star-Delta, Fwd-Rev, dan Sequence 2 Motor. Mulailah dari DOL.</p><div class="row"><button class="btn sm" data-go="simulator" data-sim="dol">Buka DOL</button></div></li>
+      <li><h3>Tekan START dan amati</h3><p>Koil KM1 menyala, kontak utama menutup, garis hijau mengalir ke motor, lampu RUN menyala, lalu rpm naik. Setelah START dilepas, motor tetap jalan karena kontak bantu 13-14 menahan KM1 (self-holding).</p></li>
+      <li><h3>Baca dua diagram</h3><p>Diagram kiri adalah power circuit, yaitu jalur daya ke motor. Diagram kanan adalah control circuit berbentuk ladder, yaitu logika perintah. Ketuk komponen mana pun untuk melihat fungsi dan terminalnya.</p><div class="legend"><span><i style="background:#4d6f90"></i>mati</span><span><i style="background:var(--am)"></i>bertegangan</span><span><i style="background:var(--ok)"></i>arus mengalir</span></div></li>
+      <li><h3>Coba STOP dan overload</h3><p>STOP memutus koil sehingga motor melambat dan berhenti. Saat motor jalan, tekan Overload OL1: kontak 95-96 membuka, KM1 mati, lampu TRIP menyala. Tekan Reset Overload sebelum START lagi.</p></li>
+      <li><h3>Pindah ke tab lain dan kerjakan soalnya</h3><p>Star-Delta menunjukkan timer 4 detik dan arus start yang turun. Fwd-Rev menunjukkan interlock: tekan REV saat FWD masih jalan, lalu lihat penolakannya. Sequence menunjukkan motor kedua baru jalan setelah motor pertama. Soal terkait ditampilkan di bawah setiap simulator.</p><div class="row"><button class="btn sm" data-go="simulator" data-sim="yd">Star-Delta</button><button class="btn sm" data-go="simulator" data-sim="fr">Fwd-Rev</button><button class="btn sm" data-go="simulator" data-sim="seq">Sequence</button></div></li>
+    </ol>
+    <div class="sec">
+      <h2 class="h2">Soal 66–70 tentang simulator</h2>
+      <div class="qgrid" id="tutList"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SIMULATOR ================= -->
+<section class="page" id="p-simulator" hidden>
+  <div class="wrap">
+    <div class="hd">
+      <p class="kick">Simulator</p>
+      <h2 class="h2">Starter motor kapal</h2>
+      <p class="lead">Jalankan motor, amati aliran daya di power circuit dan logika di control circuit. Ketuk komponen untuk melihat fungsi dan terminalnya.</p>
+    </div>
+    <div class="sim">
+      <div class="tabs" id="tabs" role="tablist" aria-label="Jenis starter"></div>
+      <p class="sim-desc" id="desc"></p>
+      <div class="sim-grid">
+        <div class="card"><h3>A. Power circuit</h3><svg id="pw" viewBox="0 0 300 340" role="img" aria-label="Rangkaian daya"></svg></div>
+        <div class="card"><h3>B. Control circuit (ladder)</h3><svg id="ct" viewBox="0 0 320 200" role="img" aria-label="Rangkaian kontrol"></svg></div>
+        <div class="card">
+          <h3>Panel kontrol</h3>
+          <div class="ctl" id="ctl"></div>
+          <p style="margin:12px 0 4px">Status: <span id="st" class="badge s-off">OFF</span></p>
+          <div class="lamps">
+            <span class="lp" id="lpP"><i></i>POWER</span>
+            <span class="lp" id="lpR"><i></i>RUN</span>
+            <span class="lp" id="lpT"><i></i>TRIP</span>
+          </div>
+          <p id="ex" class="mu" style="margin:0"></p>
+          <div class="bar" id="tw"><i id="tbar"></i></div>
+          <div class="gd">
+            <div><b id="vV">0 V</b><span>Tegangan</span></div>
+            <div><b id="vA">0 A</b><span>Arus</span></div>
+            <div><b id="vR">0 rpm</b><span>Kecepatan</span></div>
+          </div>
+          <div id="log" aria-live="polite"></div>
+        </div>
+        <div class="card"><h3>Urutan kerja</h3><ol id="steps"></ol></div>
+        <div class="card full">
+          <h3>Daftar komponen <small class="mu" style="font-weight:400;text-transform:none;letter-spacing:0">(ketuk baris atau komponen di diagram)</small></h3>
+          <div id="info">Pilih komponen untuk melihat fungsi dan terminalnya.</div>
+          <div class="tw" style="margin-top:8px">
+            <table><thead><tr><th>No</th><th>Komponen</th><th>Fungsi</th><th>Terminal</th></tr></thead><tbody id="tbd"></tbody></table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sec">
+      <h2 class="h2">Dipakai di soal</h2>
+      <p class="lead" style="margin-block:6px 12px">Ketuk nomor soal untuk membuka popup penjelasannya.</p>
+      <div class="chips" id="simSoal"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BANK SOAL ================= -->
+<section class="page" id="p-soal" hidden>
+  <div class="wrap">
+    <div class="hd">
+      <p class="kick">Bank soal</p>
+      <h2 class="h2">Soal 1–90: dari dasar listrik sampai anjungan</h2>
+      <p class="lead">Ketuk soal untuk membuka jawaban, submateri, dan tautan belajar. Tandai soal yang sudah dipelajari; tanda ini tersimpan di peramban ini saja.</p>
+    </div>
+    <div class="tools">
+      <label class="kick" for="qSearch" style="color:var(--mu)">Cari soal</label>
+      <input class="srch" id="qSearch" type="search" placeholder="Contoh: AVR, purifier, ECDIS, steering" autocomplete="off">
+      <div class="chips" id="catChips" role="group" aria-label="Filter kategori"></div>
+      <p class="prog" id="prog" aria-live="polite"></p>
+    </div>
+    <div id="qList"></div>
+  </div>
+</section>
+
+<!-- ================= PETA LINGKUP ================= -->
+<section class="page" id="p-lingkup" hidden>
+  <div class="wrap">
+    <div class="hd">
+      <p class="kick">Peta lingkup</p>
+      <h2 class="h2">Cakupan permesinan kapal</h2>
+      <p class="lead">Ketuk nama permesinan untuk membuka popup berisi pertanyaan tiga lensa, soal terkait, dan tautan pencarian.</p>
+    </div>
+    <div id="scopeList"></div>
+  </div>
+</section>
+
+<!-- ================= REFERENSI ================= -->
+<section class="page" id="p-referensi" hidden>
+  <div class="wrap">
+    <div class="hd">
+      <p class="kick">Referensi</p>
+      <h2 class="h2">Regulasi, class, dan pencarian cepat</h2>
+    </div>
+    <div class="gbox">
+      <h3>Pencarian cepat</h3>
+      <p>Ketik istilah, lalu ketuk sumber yang diinginkan. Tautan memakai pencarian di situs tujuan.</p>
+      <input class="srch" id="qs" type="search" value="marine electrical motor starter" aria-label="Kata kunci pencarian" autocomplete="off">
+      <div class="lk" id="qsLinks" style="margin-top:10px"></div>
+    </div>
+    <div class="gbox"><h3>Regulasi dan organisasi</h3><div class="rgrid" id="regList"></div></div>
+    <div class="gbox"><h3>Class society</h3><div class="rgrid" id="clsList"></div></div>
+    <p class="vessel" style="margin-top:16px">Tautan membuka situs luar di tab baru. Isi situs tersebut di luar kendali aplikasi ini.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <b>Dibuat oleh Rafael Sukirno, CE</b>
+    <span>Marine Engineering Instructor · Electrical Shipboard Machinery Learning Database</span>
+    <span>Simulator adalah model belajar yang disederhanakan. Untuk kapal nyata, rujuk wiring diagram kapal dan aturan class.</span>
+  </div>
+</footer>
+
+<!-- ================= POPUP ================= -->
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="mbk" id="mBk"></div>
+  <div class="mbox" id="mBox">
+    <button class="mx" id="mX" aria-label="Tutup popup">×</button>
+    <div id="mBody"></div>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   1. DATA SOAL — 90 nomor
+   ===================================================================== */
+var SOAL = [];
+function Q(o){SOAL.push(o)}
+
+/* ---- A. Dasar Kelistrikan Kapal (1–7) ---- */
+Q({n:1,c:'dsr',t:['P','K','S'],q:'Apa itu Electrical Power di kapal, dan apa bedanya dengan Control/Electronic dan Safety System?',
+f:'Electrical Power = menggerakkan dan mensuplai · Control = memerintah · Safety = melindungi',
+a:'Electrical Power adalah energi listrik yang dibangkitkan, didistribusikan, dan dipakai untuk menggerakkan mesin: generator, switchboard, feeder, starter, motor.\nControl/Electronic adalah cara sistem diperintah dan dipantau: tombol, relay, timer, sensor, PLC.\nSafety System adalah cara sistem melindungi manusia dan kapal: proteksi, interlock, alarm, shutdown.\nUntuk satu mesin, selalu tanyakan tiga hal: dari mana dayanya, bagaimana ia diperintah, dan apa yang melindunginya.',
+p:['Electrical Power: sumber dan jalur daya','Control / Electronic: perintah dan sensor','Safety System: proteksi dan interlock','Contoh satu mesin dibaca dengan tiga lensa','Hubungan dengan simulator starter'],
+s:['dol'],k:'marine electrical power system overview ship'});
+Q({n:2,c:'dsr',t:['P'],q:'Mengapa kapal memiliki sistem kelistrikan sendiri yang terpisah dari jaringan darat?',
+f:'Prime mover → generator → MSB → seluruh beban kapal (sistem terisolasi)',
+a:'Di laut tidak ada jaringan listrik darat. Kapal membangkitkan listriknya sendiri sehingga seluruh sistem berdiri sendiri (isolated power system).\nAkibatnya kapasitas terbatas, perubahan beban langsung memengaruhi tegangan dan frekuensi, dan gangguan kecil bisa berkembang menjadi blackout bila proteksi tidak selektif.\nKarena itu kapal memakai beberapa generator, proteksi yang selektif, dan sumber darurat yang independen.',
+p:['Sistem terisolasi dan kapasitas terbatas','Pengaruh start motor besar terhadap generator','Redundansi generator','Sumber darurat','Perbedaan dengan jaringan darat'],
+s:[],k:'marine isolated power system ship electrical'});
+Q({n:3,c:'dsr',t:['P'],q:'Berapa tegangan dan frekuensi umum di kapal, dan mengapa berbeda-beda?',
+f:'Daya: 440 V / 60 Hz atau 380–400 V / 50 Hz → lampu: 220/230 V → kontrol: 24 V DC',
+a:'Sistem utama kapal umumnya tiga fasa 440 V / 60 Hz, atau 380–400 V / 50 Hz pada sebagian kapal.\nBeban kecil seperti lampu dan stop kontak memakai 220–230 V atau 110 V lewat trafo.\nRangkaian kontrol dan peralatan elektronik memakai 24 V DC atau tegangan rendah lain.\nNilai pastinya mengikuti desain kapal dan galangan, jadi selalu cek single line diagram kapal. Frekuensi menentukan putaran sinkron motor dan generator.',
+p:['440 V / 60 Hz','380–400 V / 50 Hz','Tegangan lampu dan kontrol','Frekuensi dan putaran sinkron','Cek name plate dan SLD kapal'],
+s:[],k:'ship electrical voltage 440V 60Hz marine power'});
+Q({n:4,c:'dsr',t:['P'],q:'Apa itu sistem tiga fasa dan mengapa dipakai di kapal?',
+f:'3 fasa (L1-L2-L3) → medan putar → motor induksi start sendiri',
+a:'Sistem tiga fasa memakai tiga tegangan sinusoidal dengan beda sudut 120°.\nKeunggulannya: daya lebih rata (tidak berdenyut), kabel lebih hemat untuk daya yang sama, dan menghasilkan medan putar sehingga motor induksi bisa start sendiri tanpa perangkat bantu.\nKarena kapal punya banyak motor, tiga fasa adalah standar. Urutan fasa menentukan arah putar motor, sehingga menukar dua fasa membalik arah (dasar starter forward-reverse).',
+p:['Beda sudut 120°','Tegangan fasa dan tegangan antar fasa','Medan putar','Urutan fasa dan arah putar','Hubungan star dan delta'],
+s:['fr'],k:'three phase power system marine ship'});
+Q({n:5,c:'dsr',t:['P','K'],q:'Apa perbedaan AC dan DC pada kapal, dan di mana masing-masing dipakai?',
+f:'AC: generator, motor, distribusi utama  |  DC: baterai, kontrol, navigasi, alarm',
+a:'AC dipakai untuk pembangkitan dan distribusi utama karena mudah diubah levelnya dengan trafo dan cocok untuk motor induksi.\nDC dipakai untuk rangkaian kontrol, alarm, peralatan elektronik dan navigasi, serta sistem darurat karena bisa disimpan di baterai.\nDC 24 V dihasilkan oleh battery charger atau rectifier dari AC dan ditopang baterai agar peralatan penting tetap hidup saat blackout.',
+p:['Kelebihan AC untuk distribusi','Kelebihan DC untuk cadangan baterai','Rectifier dan battery charger','Beban DC penting','Contoh: kontrol, alarm, navigasi'],
+s:[],k:'ship AC DC power distribution battery 24V'});
+Q({n:6,c:'dsr',t:['P'],q:'Bagaimana alur listrik dari generator sampai ke beban?',
+f:'Generator → MSB (busbar) → feeder → MCC / DB → starter → motor / beban',
+a:'Generator menghasilkan tegangan dan menyalurkannya lewat circuit breaker ke busbar Main Switchboard.\nDari busbar, daya keluar lewat feeder yang diproteksi breaker menuju MCC, distribution board, atau beban besar langsung.\nPada motor, daya melewati starter lalu motor; pada beban kecil, lewat distribution board dan trafo bila perlu. Ketika sumber utama hilang, Emergency Switchboard disuplai oleh emergency generator.',
+p:['Generator dan ACB','Busbar MSB','Feeder','MCC dan distribution board','Starter dan beban','Jalur darurat'],
+s:['dol'],k:'ship electrical power flow generator switchboard feeder'});
+Q({n:7,c:'dsr',t:['P','S'],q:'Bagaimana cara membaca Single Line Diagram kapal?',
+f:'Mulai dari sumber → busbar → feeder → beban → perhatikan proteksi di tiap titik',
+a:'Single Line Diagram (SLD) menggambarkan sistem tiga fasa dengan satu garis.\nBacalah dari sumber (generator, shore connection) ke busbar, lalu ke feeder dan beban. Perhatikan simbol breaker, fuse, trafo, serta rating arus atau daya.\nDari SLD kita tahu urutan proteksi, titik pemisahan (bus-tie), dan jalur darurat. SLD adalah peta pertama untuk troubleshooting.',
+p:['Simbol umum SLD','Generator, busbar, bus-tie','Rating breaker dan kabel','Jalur normal dan darurat','Menelusuri gangguan dengan SLD'],
+s:[],k:'marine single line diagram ship electrical'});
+
+/* ---- B. Generating Plant & Switchboard (8–17) ---- */
+Q({n:8,c:'gp',t:['P'],q:'Bagaimana prinsip kerja generator sinkron (alternator) di kapal?',
+f:'Prime mover memutar rotor (medan DC) → fluks memotong stator → tegangan AC 3 fasa',
+a:'Rotor diberi arus DC (eksitasi) sehingga menjadi magnet yang berputar. Medan putar ini memotong belitan stator dan menimbulkan tegangan AC tiga fasa.\nFrekuensi ditentukan putaran dan jumlah kutub: f = n × p / 120.\nBesar tegangan diatur oleh eksitasi (AVR), sedangkan frekuensi diatur oleh putaran engine (governor).',
+p:['Rotor dan stator','Eksitasi','Rumus f = n × p / 120','Tegangan dan kutub','Hubungan dengan AVR dan governor'],
+s:[],k:'synchronous generator alternator principle marine'});
+Q({n:9,c:'gp',t:['P'],q:'Apa saja komponen utama generating plant di kapal?',
+f:'Prime mover + governor → alternator + exciter + AVR → generator breaker → MSB',
+a:'Generating plant terdiri dari prime mover (diesel engine, kadang turbin atau shaft generator), governor, alternator dengan sistem eksitasi dan AVR, generator breaker, serta peralatan proteksi dan instrumen di panel.\nPendukungnya: sistem pelumasan, pendinginan, bahan bakar, dan starting.\nKebanyakan kapal niaga memakai tiga diesel generator: satu siaga, sisanya melayani beban.',
+p:['Diesel generator','Shaft generator dan turbo generator','Governor dan AVR','Breaker dan proteksi','Sistem bantu generator'],
+s:[],k:'marine generating plant diesel generator components'});
+Q({n:10,c:'gp',t:['P'],q:'Mengapa kapal memiliki lebih dari satu generator?',
+f:'Redundansi + fleksibilitas beban + perawatan bergilir',
+a:'Kapal harus tetap punya listrik walau satu generator rusak atau sedang dirawat.\nBeberapa generator memungkinkan satu generator siaga, beban dibagi sesuai kebutuhan (di laut, manuver, di pelabuhan), dan pemeliharaan bergilir.\nDengan beberapa generator, sistem juga perlu paralel, load sharing, dan proteksi selektif.',
+p:['Redundansi','Penyesuaian dengan beban kapal','Perawatan bergilir','Standby dan auto start','Dampak ke paralel dan load sharing'],
+s:[],k:'ship multiple generators redundancy load'});
+Q({n:11,c:'gp',t:['P','S'],q:'Apa fungsi dan komponen Main Switchboard (MSB)?',
+f:'Panel generator → busbar → panel feeder → distribusi',
+a:'MSB adalah pusat pengendali listrik kapal: menerima daya dari generator, membaginya lewat busbar, dan menyalurkannya ke feeder.\nIsinya panel generator (ACB, instrumen, proteksi), panel sinkronisasi, panel feeder atau group starter, dan sering shore connection.\nMSB biasanya ditempatkan di kamar kendali mesin (ECR) atau dekat kamar mesin agar mudah dipantau.',
+p:['Panel generator','Panel sinkronisasi','Panel feeder','Instrumen dan alarm','Interlock dan akses aman'],
+s:[],k:'marine main switchboard components generator'});
+Q({n:12,c:'gp',t:['P','S'],q:'Apa fungsi busbar dan bagaimana MSB dibagi?',
+f:'Busbar seksi 1 ⟷ bus-tie ⟷ busbar seksi 2',
+a:'Busbar adalah penghantar tempat semua generator dan feeder terhubung.\nPada sebagian kapal, busbar dibagi dua seksi dengan bus-tie breaker. Bila satu seksi mengalami gangguan, seksi lain tetap hidup.\nBus-tie juga memudahkan paralel antar seksi dan memisahkan sistem untuk pengujian atau pemeliharaan.',
+p:['Busbar dan rating arus','Pembagian seksi','Bus-tie breaker','Isolasi gangguan','Pemeliharaan busbar'],
+s:[],k:'marine switchboard busbar bus-tie breaker'});
+Q({n:13,c:'gp',t:['P','S'],q:'Apa fungsi ACB, MCCB, MCB, dan fuse, dan apa bedanya?',
+f:'ACB (besar, generator / feeder utama) > MCCB (feeder, motor) > MCB (kecil) > fuse',
+a:'Semuanya adalah proteksi arus.\nACB (Air Circuit Breaker) untuk arus besar seperti generator dan feeder utama, dengan setting yang bisa diatur.\nMCCB (Moulded Case) untuk feeder dan motor menengah.\nMCB untuk beban kecil.\nFuse memutus dengan melelehkan elemen dan sekali pakai.\nSetiap breaker punya proteksi short circuit dan overload, kecuali kasus khusus seperti steering gear.',
+p:['ACB','MCCB','MCB','Fuse','Setting dan selektivitas'],
+s:[],k:'ACB MCCB MCB fuse difference marine breaker'});
+Q({n:14,c:'gp',t:['K','P'],q:'Apa fungsi Power Management System (PMS)?',
+f:'Sensor beban → PMS → start/stop generator, sinkronisasi, load sharing, blackout recovery',
+a:'PMS mengelola generator secara otomatis: start dan stop generator menurut beban, sinkronisasi, load sharing, dan penanganan blackout (restart berurutan beban penting).\nPMS juga memantau status breaker dan alarm daya.\nPMS adalah sistem kontrol (electronic control), sedangkan daya generator tetap electrical power. Karena itu PMS dipelajari dari sisi kontrol.',
+p:['Load dependent start/stop','Auto synchronizing','Load sharing','Blackout recovery','Hubungan dengan proteksi'],
+s:[],k:'marine power management system PMS'});
+Q({n:15,c:'gp',t:['P','S'],q:'Apa itu blackout dan bagaimana pemulihannya?',
+f:'Blackout → emergency generator → reset MSB → start generator utama → restart beban berurutan',
+a:'Blackout adalah hilangnya seluruh daya di MSB.\nEmergency generator start otomatis dan menyuplai beban darurat. Setelah penyebab dicari, generator utama distart, breaker di-reset, dan beban penting dinyalakan berurutan: steering gear, pompa pelumas dan pendingin, bahan bakar, baru beban lain.\nUrutan bertahap menghindari arus start serentak yang bisa memicu blackout lagi. Banyak kapal punya sequential restart otomatis.',
+p:['Penyebab blackout','Emergency generator','Reset breaker dan start generator','Restart bertahap beban penting','Pencegahan'],
+s:['seq'],k:'ship blackout recovery procedure engine room'});
+Q({n:16,c:'gp',t:['P','S'],q:'Apa itu shore connection dan apa yang harus diperhatikan?',
+f:'Daya darat → shore connection box → breaker MSB → interlock dengan generator',
+a:'Shore connection menyuplai kapal dari darat saat di pelabuhan.\nPastikan tegangan, frekuensi, dan urutan fasa cocok. Breaker shore connection di-interlock agar tidak paralel dengan generator, kecuali ada fasilitas khusus.\nPeriksa kondisi kabel, grounding, dan prosedur dengan terminal. Pada kapal tertentu, alur ini disebut shore power atau cold ironing.',
+p:['Syarat tegangan, frekuensi, urutan fasa','Interlock dengan generator','Kabel dan grounding','Prosedur dengan terminal','Indikator dan proteksi'],
+s:[],k:'ship shore connection shore power cold ironing'});
+Q({n:17,c:'gp',t:['P','S'],q:'Apa fungsi space heater dan tes insulation resistance pada generator?',
+f:'Generator berhenti → space heater menjaga kering → megger cek isolasi sebelum start',
+a:'Saat generator diam, uap lembap bisa mengembun pada belitan dan menurunkan tahanan isolasi.\nSpace heater menjaga belitan tetap hangat dan kering.\nSebelum start setelah lama berhenti, tahanan isolasi diukur dengan megger.\nTahanan isolasi rendah berisiko trip atau kerusakan belitan. Ini bagian perawatan penting generator dan motor.',
+p:['Kondensasi pada belitan','Space heater','Megger dan nilai tahanan isolasi','Kapan harus diukur','Tindakan bila rendah'],
+s:[],k:'generator space heater insulation resistance megger'});
+
+/* ---- C. Distribusi, Emergency & Daya Cadangan (18–24) ---- */
+Q({n:18,c:'dist',t:['P','S'],q:'Bagaimana distribusi daya dari MSB ke beban?',
+f:'MSB → feeder → MCC / group starter / DB → beban',
+a:'Dari MSB, feeder yang diproteksi breaker menuju tiga jenis tujuan: MCC (kumpulan starter motor), distribution board untuk lampu dan stop kontak lewat trafo, serta beban besar langsung.\nPembagian ini memudahkan isolasi gangguan dan pemeliharaan. Beban penting biasanya punya dua jalur atau pompa standby.',
+p:['Feeder','MCC dan group starter panel','Distribution board','Trafo penurun','Dual feed untuk beban penting'],
+s:['dol'],k:'marine power distribution MCC distribution board'});
+Q({n:19,c:'dist',t:['P'],q:'Apa fungsi transformer di kapal?',
+f:'440 V → trafo → 220 / 110 V (isolasi galvanik)',
+a:'Trafo menurunkan tegangan utama ke 220/230 V atau 110 V untuk lampu, stop kontak, dan peralatan kecil.\nTrafo juga memberi isolasi galvanik antara sistem utama dan sistem beban. Rating (kVA) harus sesuai beban.\nPada trafo tersedia proteksi hubung singkat dan overload, serta pemantauan suhu pada trafo kering.',
+p:['Trafo penurun','Isolasi galvanik','Rating kVA','Hubungan belitan','Proteksi trafo'],
+s:[],k:'marine transformer ship electrical isolation'});
+Q({n:20,c:'dist',t:['P','S'],q:'Bagaimana Emergency Switchboard (ESB) bekerja?',
+f:'Normal: MSB → bus-tie → ESB  |  Blackout: bus-tie terbuka → emergency generator → ESB',
+a:'ESB menyuplai beban darurat: lampu darurat, navigasi, komunikasi, alarm, steering gear, dan fire pump darurat.\nPada kondisi normal, ESB disuplai dari MSB lewat bus-tie. Saat blackout, bus-tie terbuka dan emergency generator menyuplai ESB.\nInterlock mencegah kedua sumber terhubung bersamaan tanpa kontrol. ESB juga punya sumber cadangan dari baterai untuk beban tertentu.',
+p:['Bus-tie dan interlock','Beban darurat','Start otomatis emergency generator','Baterai darurat','Uji berkala'],
+s:[],k:'marine emergency switchboard bus tie emergency generator'});
+Q({n:21,c:'dist',t:['P','S'],q:'Apa beda essential, non-essential, dan emergency services?',
+f:'Essential = jalan kapal  |  Non-essential = boleh dilepas  |  Emergency = tetap hidup saat blackout',
+a:'Essential services diperlukan untuk propulsi dan keselamatan operasi (steering, pompa pelumas dan pendingin, bahan bakar).\nNon-essential (misalnya galley, laundry, sebagian HVAC) bisa dilepas bila generator kelebihan beban.\nEmergency services harus tetap hidup saat blackout (lampu darurat, alarm, navigasi).\nKlasifikasi ini menjadi dasar load shedding dan preferential trip.',
+p:['Essential services','Non-essential services','Emergency services','Dasar preferential trip','Contoh pembagian beban'],
+s:[],k:'ship essential non-essential emergency services load'});
+Q({n:22,c:'dist',t:['P'],q:'Apa itu electrical load balance kapal?',
+f:'Daftar beban × faktor pemakaian → kebutuhan daya tiap kondisi',
+a:'Electrical load balance adalah tabel kebutuhan daya kapal pada berbagai kondisi: berlayar, manuver, di pelabuhan, bongkar muat, dan darurat.\nPerhitungannya memakai daya tiap beban dikali faktor pemakaian, lalu dijumlahkan.\nHasilnya menentukan jumlah dan kapasitas generator, serta kondisi mana yang paling berat.',
+p:['Kondisi operasi','Faktor pemakaian','Total beban dan kapasitas generator','Margin dan cadangan','Pemakaian load balance saat operasi'],
+s:[],k:'ship electrical load balance calculation generator'});
+Q({n:23,c:'dist',t:['P','S'],q:'Bagaimana baterai dan battery charger dipakai di kapal?',
+f:'AC → battery charger → DC bus 24 V + baterai → beban DC',
+a:'Baterai menjadi sumber cadangan DC untuk kontrol, alarm, navigasi, dan sistem darurat, serta menstart emergency generator.\nBattery charger mengubah AC menjadi DC dan menjaga baterai tetap terisi.\nBaterai harus dirawat: cek tegangan, elektrolit (jenis timbal-asam), ventilasi (gas hidrogen), dan uji kapasitas. Ruang baterai punya ventilasi khusus.',
+p:['Baterai timbal-asam dan alkali','Charger dan float charging','24 V DC','Ventilasi','Uji kapasitas'],
+s:[],k:'ship battery charger 24V DC emergency battery'});
+Q({n:24,c:'dist',t:['P','K'],q:'Apa fungsi UPS di kapal dan peralatan apa yang dilindungi?',
+f:'AC → UPS (baterai + inverter) → beban sensitif tanpa putus',
+a:'UPS menyuplai peralatan sensitif tanpa jeda saat sumber utama berpindah atau hilang, misalnya blackout sesaat.\nBeban yang umum: peralatan navigasi, sistem kontrol dan alarm, PLC, dan komputer kendali.\nUPS punya waktu cadangan terbatas, cukup untuk transisi ke emergency generator atau mematikan sistem dengan aman.',
+p:['UPS online dan offline','Baterai dan inverter','Beban sensitif','Waktu cadangan','Alarm UPS'],
+s:[],k:'ship UPS uninterruptible power supply navigation marine'});
+
+/* ---- D. Motor & Starter (25–31) ---- */
+Q({n:25,c:'mot',t:['P'],q:'Bagaimana prinsip kerja motor induksi 3 fasa?',
+f:'Stator → medan putar → arus induksi di rotor → torsi → putaran lebih lambat dari sinkron (slip)',
+a:'Belitan stator tiga fasa menghasilkan medan magnet yang berputar. Medan ini menginduksi arus di rotor yang menghasilkan torsi, sehingga rotor berputar sedikit lebih lambat dari medan (slip).\nPutaran sinkron: n = 120 × f / p.\nMotor induksi kokoh, murah, dan dipakai untuk hampir semua pompa, fan, dan kompresor kapal.',
+p:['Medan putar','Slip','Putaran sinkron','Rotor sangkar','Arah putar dan urutan fasa'],
+s:['dol'],k:'three phase induction motor working principle slip'});
+Q({n:26,c:'mot',t:['P','S'],q:'Mengapa arus start motor besar dan apa dampaknya?',
+f:'Start: rotor diam → slip 100% → arus 5–7× arus nominal → tegangan generator turun',
+a:'Saat start, rotor diam sehingga motor seperti trafo yang dihubung singkat. Arusnya kira-kira 5–7 kali arus nominal.\nPada sistem terisolasi, arus ini membuat tegangan dan frekuensi turun sesaat, dan bila banyak motor start serentak bisa memicu trip.\nSolusinya: starter yang membatasi arus (star-delta, soft starter, VFD) dan start bertahap.',
+p:['Arus start vs arus nominal','Penurunan tegangan','Dampak ke generator','Start serentak dan blackout','Metode pembatasan'],
+s:['dol','yd'],k:'motor starting current inrush marine generator'});
+Q({n:27,c:'mot',t:['P','K'],q:'Apa itu DOL starter dan kapan dipakai?',
+f:'MCCB → contactor KM1 → overload OL1 → motor  |  kontrol: S0 (NC), S1 (NO), 13-14, OL',
+a:'DOL (Direct On Line) menyambung motor langsung ke tegangan penuh.\nRangkaian kontrolnya memakai tombol START, STOP, kontak bantu 13-14 untuk self-holding, dan overload relay.\nSederhana dan murah, cocok untuk motor kecil dan menengah seperti bilge pump atau fan.\nKekurangannya arus start tinggi, jadi tidak ideal untuk motor besar pada generator terbatas.',
+p:['Power dan control circuit','Self-holding 13-14','Overload relay','Kelebihan dan kekurangan','Contoh pemakaian'],
+s:['dol'],k:'DOL direct on line starter motor control wiring'});
+Q({n:28,c:'mot',t:['P','K'],q:'Apa itu Star-Delta starter dan bagaimana cara kerjanya?',
+f:'Start bintang (Y) → timer → pindah segitiga (Δ)',
+a:'Motor distart dalam hubungan bintang sehingga tegangan tiap belitan lebih rendah dan arus start turun sekitar sepertiga.\nSetelah timer habis, kontaktor bintang lepas dan kontaktor segitiga masuk sehingga motor bekerja pada tegangan penuh.\nSyaratnya motor enam terminal dan tegangan belitan segitiga sama dengan tegangan jala-jala. Torsi start juga turun, jadi cocok untuk beban ringan saat start.',
+p:['Kontaktor main, star, delta','Timer','Interlock star dan delta','Syarat motor','Kelebihan dan kekurangan'],
+s:['yd'],k:'star delta starter motor control wiring'});
+Q({n:29,c:'mot',t:['P','K','S'],q:'Apa itu FWD/REV starter dan bagaimana interlock-nya?',
+f:'KM1 (maju) ⟷ KM2 (mundur, tukar L2-L3) + interlock kontak NC',
+a:'Dua kontaktor dipakai: satu untuk putaran maju, satu untuk mundur dengan menukar dua fasa.\nInterlock memakai kontak NC KM1 pada rangkaian KM2 dan sebaliknya, sehingga keduanya tidak bisa aktif bersamaan (mencegah hubung singkat antar fasa).\nDipakai untuk windlass, winch, dan crane. Tekan STOP dulu sebelum membalik arah.',
+p:['Pertukaran dua fasa','Interlock elektrik','Interlock mekanik','Pemakaian di deck machinery','Troubleshooting'],
+s:['fr'],k:'forward reverse starter interlock motor control'});
+Q({n:30,c:'mot',t:['P','K'],q:'Apa itu Soft Starter dan VFD, dan apa bedanya dari starter lain?',
+f:'Soft starter: menaikkan tegangan bertahap  |  VFD: mengatur frekuensi dan tegangan',
+a:'Soft starter menaikkan tegangan motor secara bertahap dengan thyristor sehingga arus dan hentakan start lebih halus; setelah motor mencapai putaran, soft starter biasanya di-bypass.\nVFD (Variable Frequency Drive) mengubah frekuensi dan tegangan, sehingga putaran bisa diatur dan penghematan energi bisa didapat.\nVFD memerlukan perhatian pada harmonisa, pendinginan, dan proteksi.',
+p:['Thyristor dan bypass','Pengaturan putaran dengan VFD','Harmonisa','Aplikasi: pompa, fan, ballast','Perbandingan dengan DOL dan star-delta'],
+s:[],k:'soft starter VFD variable frequency drive marine'});
+Q({n:31,c:'mot',t:['P','K'],q:'Bagaimana memilih jenis starter yang tepat?',
+f:'Daya motor + beban + kapasitas generator + kebutuhan kecepatan → DOL / Star-Delta / Soft / VFD',
+a:'Pilihan bergantung pada daya motor, jenis beban (ringan atau berat saat start), kapasitas generator, kebutuhan mengatur putaran, dan aturan class.\nMotor kecil memakai DOL, motor menengah-besar dengan beban ringan memakai star-delta, yang butuh start halus memakai soft starter, dan yang butuh variasi putaran memakai VFD.\nSelalu cek batas arus start yang diizinkan sistem kapal.',
+p:['Daya dan beban','Kapasitas generator','Kebutuhan kecepatan variabel','Biaya dan ruang panel','Persyaratan class'],
+s:['dol','yd','fr'],k:'selecting motor starter DOL star delta soft starter VFD'});
+
+/* ---- E. Proteksi, Kabel & Keselamatan (32–35) ---- */
+Q({n:32,c:'prot',t:['S','P'],q:'Apa saja proteksi utama pada sistem kelistrikan kapal?',
+f:'Short circuit · overload · earth fault · reverse power · tegangan dan frekuensi tidak normal',
+a:'Proteksi utama: short circuit (arus sangat besar, trip instan), overload (arus berlebih lebih lama, trip bertunda), earth fault (kebocoran ke badan kapal), reverse power (generator berubah menjadi motor), serta tegangan dan frekuensi tidak normal.\nSemua dikoordinasikan agar selektif.\nSelektivitas berarti hanya breaker terdekat dari gangguan yang trip.',
+p:['Short circuit dan overload','Earth fault','Reverse power','Under/over voltage dan frequency','Selektivitas'],
+s:[],k:'marine electrical protection short circuit overload earth fault'});
+Q({n:33,c:'prot',t:['S'],q:'Apa itu earth fault dan bagaimana insulation monitoring di kapal?',
+f:'Sistem tidak dibumikan (IT) → 1 earth fault = alarm → cari dan perbaiki',
+a:'Sistem tiga fasa kapal umumnya tidak dibumikan langsung, sehingga satu earth fault tidak langsung memicu arus besar dan sistem tetap bisa jalan.\nInsulation monitoring (lampu earth atau relay) memberi alarm saat tahanan isolasi turun.\nSatu earth fault harus segera dicari, karena earth fault kedua di fasa lain menjadi hubung singkat.',
+p:['Sistem IT tidak dibumikan','Lampu earth dan insulation monitor','Satu earth fault vs dua','Mencari lokasi gangguan','Pengukuran megger'],
+s:[],k:'ship insulated neutral earth fault insulation monitoring'});
+Q({n:34,c:'prot',t:['P','S'],q:'Apa syarat kabel kapal dan bagaimana memilihnya?',
+f:'Kabel marine (IEC 60092) → rating arus → voltage drop → tahan api → jalur aman',
+a:'Kabel kapal dirancang tahan getaran, kelembapan, minyak, dan api (flame retardant).\nPemilihan memperhatikan arus nominal, penurunan tegangan, temperatur ruangan, dan arus hubung singkat. Standar yang banyak dipakai adalah seri IEC 60092.\nKabel untuk sistem penting seperti steering dan emergency dipisah jalurnya agar tidak ikut rusak saat kebakaran.',
+p:['Standar IEC 60092','Flame retardant dan fire resistant','Rating arus','Voltage drop','Pemisahan jalur kabel penting'],
+s:[],k:'marine cable IEC 60092 flame retardant ship cable'});
+Q({n:35,c:'prot',t:['S'],q:'Bagaimana aturan keselamatan bekerja pada sistem listrik kapal?',
+f:'Isolasi → kunci dan tag (LOTO) → uji tidak bertegangan → kerja → pulihkan',
+a:'Sebelum bekerja pada peralatan listrik: matikan dan isolasi sumber, pasang kunci dan tag (lock-out tag-out), uji bahwa peralatan benar-benar tidak bertegangan, lalu minta izin kerja (permit to work) bila diperlukan. Pakai APD yang sesuai.\nJangan menganggap panel mati sebelum diuji. Pulihkan daya hanya setelah semua orang bebas dari peralatan.',
+p:['Isolasi dan LOTO','Uji tidak bertegangan','Permit to work','APD','Pemulihan aman'],
+s:[],k:'marine electrical safety lock out tag out permit'});
+
+/* ---- I. Main Engine & Propulsion (36–42) ---- */
+Q({n:36,c:'me',t:['P','K'],q:'Bagaimana electrical system yang berhubungan dengan Main Engine?',
+f:'MSB → feeder + MCCB → starter → motor / pump / fan → sistem bantu Main Engine',
+a:'Main Engine adalah penggerak mekanik, tetapi tidak bisa hidup tanpa sistem bantu yang digerakkan listrik: pompa pelumas, pendingin, bahan bakar, blower, dan turning gear.\nDaya diambil dari Main Switchboard lewat feeder yang diproteksi MCCB, diteruskan ke starter, lalu ke motor.\nDi samping jalur daya, ada rangkaian kontrol dan alarm yang memantau tekanan dan suhu Main Engine.',
+p:['Feeder dari MSB dan proteksinya','Starter dan motor bantu','Rangkaian kontrol dan alarm','Pompa standby dan auto changeover','Hubungan dengan safety system Main Engine'],
+s:['seq','dol'],k:'marine main engine auxiliary electric motors'});
+Q({n:37,c:'me',t:['P'],q:'Apa saja motor listrik pendukung Main Engine?',
+f:'MSB → starter → motor → pompa / fan / turning gear',
+a:'Motor pendukung yang umum: pompa lubricating oil, pompa cooling water (jacket, LT, sea water), pompa bahan bakar (supply dan circulating), pompa pre-lubrication, motor turning gear, auxiliary blower, dan fan ventilasi kamar mesin.\nPompa yang kritis dibuat main dan standby. Bila pompa utama gagal, pompa standby start otomatis dari sinyal tekanan rendah.',
+p:['Lubricating oil pump','Cooling water pump','Fuel oil supply dan circulating pump','Pre-lubrication pump','Turning gear','Ventilation dan auxiliary blower','Auto changeover pompa standby'],
+s:['dol','seq'],k:'marine main engine auxiliary pumps motors lube oil'});
+Q({n:38,c:'me',t:['P','K'],q:'Bagaimana electrical system Main Engine Lubricating Oil Pump?',
+f:'Feeder → MCCB → starter → motor → pump → sistem pelumasan',
+a:'Feeder dari MSB atau MCC diproteksi MCCB terhadap hubung singkat.\nContactor menyambung daya ke motor dan overload relay melindungi dari arus berlebih.\nMotor memutar pompa yang menjaga tekanan oli ke bearing Main Engine.\nPompa standby dipasang paralel. Pressure switch pada header oli memberi sinyal start ke pompa standby saat tekanan turun, dan alarm berbunyi.\nPelumasan adalah sistem kritis, jadi kegagalan pompa langsung berhubungan dengan slowdown atau shutdown.',
+p:['Jalur daya feeder sampai motor','Proteksi: MCCB dan overload relay','Pressure switch dan start pompa standby','Sinyal running dan alarm low pressure','Troubleshooting: pompa tidak start'],
+s:['dol'],k:'marine main engine lubricating oil pump electric motor'});
+Q({n:39,c:'me',t:['P','K'],q:'Bagaimana electrical system Jacket Cooling Water Pump?',
+f:'Feeder → MCCB → starter → motor → pump → jacket water → engine → cooler',
+a:'Jalur dayanya sama dengan pompa lain: feeder, MCCB, starter, overload relay, lalu motor.\nPompa mensirkulasikan jacket water melalui engine dan cooler. Temperatur diatur oleh katup tiga arah, bukan oleh motor.\nSaat engine berhenti, heater listrik pada jacket water menjaga engine tetap hangat dan dikendalikan thermostat. Heater adalah beban listrik tersendiri yang perlu feeder dan proteksi.\nPompa standby start otomatis saat tekanan atau aliran turun.',
+p:['Pompa utama dan standby','Preheater listrik jacket water','Sensor suhu dan tekanan','Alarm high temperature','Interlock dengan start Main Engine'],
+s:['dol'],k:'marine jacket cooling water pump electric heater preheater'});
+Q({n:40,c:'me',t:['P','K','S'],q:'Mengapa Main Engine membutuhkan pre-lubrication sebelum starting?',
+f:'Pre-lub pump start → tekanan oli terbentuk → permissive start Main Engine',
+a:'Setelah engine berhenti lama, lapisan oli pada bearing menipis. Start tanpa pelumasan membuat logam bergesekan langsung pada putaran awal dan mempercepat keausan.\nPompa pre-lubrication (digerakkan motor listrik) membentuk tekanan oli lebih dulu.\nSecara kontrol, ini adalah urutan: pompa harus jalan dan tekanan harus tercapai sebelum sinyal start diizinkan.\nLogikanya sama dengan sequence start pada simulator, yaitu satu motor memberi izin untuk langkah berikutnya.',
+p:['Lapisan oli pada bearing saat engine diam','Pompa pre-lub dan sumber dayanya','Permissive start berdasarkan tekanan oli','Perbedaan pre-lub dan pompa LO utama','Logika sequence pada simulator'],
+s:['seq'],k:'marine engine pre-lubrication pump before starting'});
+Q({n:41,c:'me',t:['P','K','S'],q:'Bagaimana electrical system Turning Gear?',
+f:'MSB → MCCB → starter → motor → gearbox → flywheel (engage / disengage)',
+a:'Turning gear memutar crankshaft pelan-pelan untuk pengecekan atau perawatan. Motornya mendapat daya dari feeder MSB lewat MCCB dan starter.\nSebagian desain memakai starter forward-reverse bila arah putar bisa dibalik; sebagian lain satu arah saja. Motor sering dilengkapi brake dan locking mechanism.\nBagian terpenting adalah safety interlock: selama turning gear engage, start Main Engine harus terblokir dan lampu atau alarm menunjukkan status engage. Sebaliknya, turning gear tidak boleh bisa dijalankan saat engine sedang start.',
+p:['Motor, starter, dan arah putar','Brake dan locking mechanism','Interlock: turning gear engaged memblokir start','Lampu indikator engaged / disengaged','Prosedur isolasi sebelum perawatan'],
+s:['fr'],k:'marine main engine turning gear electric motor interlock'});
+Q({n:42,c:'me',t:['P','K','S'],q:'Apa yang terjadi secara electrical ketika Main Engine mengalami emergency shutdown?',
+f:'Sensor → safety system → shutdown signal → solenoid fuel cut-off → engine stop + alarm',
+a:'Pisahkan empat hal.\nPower circuit: feeder dan motor bantu, yang bisa tetap jalan untuk mendinginkan engine.\nControl circuit: relay dan logika yang bertegangan rendah.\nShutdown signal: keluaran safety system yang memutus bahan bakar lewat solenoid atau fuel rack.\nAlarm: pemberitahuan ke operator di ECR dan anjungan.\nShutdown dari sensor kritis (misalnya overspeed atau tekanan oli sangat rendah) dibuat fail-safe dan biasanya latch, sehingga harus di-reset manual setelah penyebabnya dicari. Beberapa shutdown boleh di-override saat keselamatan navigasi, tetapi shutdown tertentu seperti overspeed umumnya tidak.',
+p:['Power circuit vs control circuit','Sinyal shutdown dan slowdown','Solenoid fuel cut-off dan latch','Alarm dan first-out indication','Override dan reset menurut aturan class'],
+s:[],k:'marine main engine emergency shutdown safety overspeed'});
+
+/* ---- II. Generator / Generating Plant (43–49) ---- */
+Q({n:43,c:'gen',t:['P'],q:'Bagaimana electrical system dari diesel generator sampai Main Switchboard?',
+f:'Diesel engine → alternator → generator breaker (ACB) → busbar MSB → feeder → MCC / DB → beban',
+a:'Diesel engine memutar alternator. Tegangan stator keluar lewat kabel ke generator circuit breaker (ACB) di MSB, lalu masuk ke busbar.\nDari busbar, daya dibagi ke feeder menuju MCC, distribution board, dan beban besar.\nPada panel generator terdapat proteksi (overcurrent, short circuit, reverse power, undervoltage), instrumen ukur, dan peralatan sinkronisasi. Eksitasi diatur oleh AVR agar tegangan stabil.',
+p:['Alternator dan stator output','ACB generator dan interlock','Busbar dan feeder','Proteksi generator','Instrumen dan synchronizing'],
+s:[],k:'marine diesel generator main switchboard busbar breaker'});
+Q({n:44,c:'gen',t:['P','K'],q:'Apa fungsi AVR pada generator?',
+f:'Sensing tegangan stator → AVR → arus eksitasi → rotor → tegangan stator',
+a:'AVR (Automatic Voltage Regulator) menjaga tegangan keluaran generator tetap pada nilai setpoint saat beban berubah.\nAVR membaca tegangan stator, membandingkannya dengan referensi, lalu mengatur arus eksitasi.\nPada generator brushless, AVR mengatur arus medan exciter. Keluaran exciter (AC pada rotor) disearahkan oleh rotating rectifier menjadi DC yang memberi medan pada rotor utama.\nTegangan turun, AVR menaikkan eksitasi; tegangan naik, AVR menurunkannya.',
+p:['Exciter dan rotating rectifier','Rotor, stator, dan feedback','Voltage sensing','Mode kegagalan: kehilangan sensing, dioda rusak, hilang residual','Troubleshooting dan contoh kasus'],
+s:[],k:'marine generator AVR automatic voltage regulator brushless'});
+Q({n:45,c:'gen',t:['P','K'],q:'Apa hubungan Governor dengan AVR?',
+f:'Governor → bahan bakar → speed → frequency  |  AVR → eksitasi → voltage',
+a:'Governor mengatur putaran engine, jadi mengatur frequency.\nAVR mengatur eksitasi, jadi mengatur voltage. Keduanya bekerja terpisah tetapi pada mesin yang sama.\nDalam operasi paralel, governor menentukan pembagian daya aktif (kW) dan AVR menentukan pembagian daya reaktif (kVAr).\nKarena itu operator mengatur kW lewat governor dan mengamati kVAr serta voltage lewat AVR.',
+p:['Frekuensi dan putaran: f = n × p / 120','Daya aktif dan reaktif','Droop governor','Droop atau cross-current compensation pada AVR','Dampak masing-masing saat paralel'],
+s:[],k:'marine generator governor AVR frequency voltage control'});
+Q({n:46,c:'gen',t:['P','K','S'],q:'Bagaimana generator dapat diparalelkan dengan generator lain?',
+f:'Cek 4 syarat → synchroscope di titik 12 → tutup ACB → ambil beban',
+a:'Empat syarat paralel: tegangan sama, frekuensi sama (generator masuk sedikit lebih tinggi), urutan fasa sama, dan sudut fasa sama.\nVoltage dan frequency diatur lewat AVR dan governor; sudut fasa dibaca pada synchroscope.\nBreaker ditutup sesaat sebelum jarum synchroscope mencapai titik 12 jam, lalu beban dialihkan bertahap.\nMenutup di luar sinkron menimbulkan arus sirkulasi besar dan hentakan torsi pada poros. Urutan fasa hanya perlu dicek ulang setelah pekerjaan kabel atau sambungan shore connection.',
+p:['Voltage','Frequency','Phase sequence','Phase angle','Akibat paralel yang salah'],
+s:[],k:'marine generator paralleling synchronizing synchroscope'});
+Q({n:47,c:'gen',t:['P','K'],q:'Bagaimana load sharing bekerja antara dua generator paralel?',
+f:'Governor mengatur kW · AVR mengatur kVAr · droop dan cross-current compensation',
+a:'Bila dua generator paralel, keduanya harus berbagi beban aktif (kW) dan reaktif (kVAr) secara proporsional.\nDaya aktif diatur oleh governor. Dengan mode droop, penambahan bahan bakar menaikkan kW yang disuplai generator itu.\nDaya reaktif diatur oleh AVR dengan cross-current compensation (droop kVAr), sehingga kVAr terbagi rata.\nBila kW tidak seimbang, periksa setting governor. Bila kVAr atau arus tidak seimbang, periksa AVR dan kabel sensing.',
+p:['Droop governor','Droop kVAr pada AVR','Cross-current compensation','Tanda kW / kVAr tidak seimbang','Penyesuaian saat kapal beroperasi'],
+s:[],k:'marine generator load sharing kW kVAr droop'});
+Q({n:48,c:'gen',t:['S'],q:'Apa itu reverse power protection pada generator?',
+f:'Generator berubah jadi motor → daya mengalir balik → relay trip → ACB terbuka',
+a:'Reverse power terjadi bila generator yang paralel kehilangan tenaga penggerak (misalnya bahan bakar berkurang atau engine trip) sehingga generator berubah menjadi motor listrik yang menyerap daya dari busbar.\nKondisi ini bisa merusak prime mover. Relay reverse power (32) mendeteksi arah daya aktif yang berbalik dan men-trip ACB setelah waktu tunda kecil.\nReverse power juga muncul sesaat saat sinkronisasi, jadi relay punya setting dan delay agar tidak salah trip.',
+p:['Penyebab reverse power','Relay 32 dan arah daya','Setting dan delay','Akibat ke prime mover','Uji fungsi relay'],
+s:[],k:'marine generator reverse power protection relay 32'});
+Q({n:49,c:'gen',t:['S','P'],q:'Apa saja alarm dan proteksi penting pada generator kapal?',
+f:'Overcurrent · earth fault · undervoltage · overvoltage · overfrequency · reverse power · low insulation',
+a:'Alarm dan proteksi penting pada generator:\n- Overcurrent dan short circuit (breaker ACB)\n- Earth fault (insulation monitor)\n- Undervoltage dan overvoltage\n- Underfrequency dan overfrequency\n- Reverse power (relay 32)\n- Low insulation resistance\n- Over temperature bearing atau belitan\n- Loss of excitation\nTiap alarm biasanya memiliki indikasi di panel generator dan di ECR. First-out indication membantu menemukan penyebab pertama sebelum alarm lain menyusul.',
+p:['Overcurrent','Earth fault','Undervoltage dan overvoltage','Under/over frequency','Reverse power','Over temperature','Loss of excitation'],
+s:[],k:'marine generator protection alarm list'});
+
+/* ---- III. Boiler & Steam System (50–55) ---- */
+Q({n:50,c:'boil',t:['P','K','S'],q:'Apa saja sistem listrik pada auxiliary boiler di kapal?',
+f:'MSB → feeder → burner control panel → igniter, fan, pompa, valve, sensor',
+a:'Auxiliary boiler memiliki beberapa beban listrik: motor fan pembakaran (forced draft), motor pompa bahan bakar, igniter/penyala, solenoid valve, dan aktuator kontrol. Semuanya dikendalikan oleh burner control panel.\nPanel ini menerima sinyal dari sensor (tekanan steam, suhu, level air, flame detector) dan mengatur urutan start: purging, ignition, pembakaran, modulasi.\nProteksi boiler (low water, flame failure, high pressure) memutus bahan bakar bila kondisi tidak aman. Ini contoh kerja sama power + control + safety.',
+p:['Motor fan dan pompa bahan bakar','Igniter dan solenoid valve','Burner control panel','Sensor dan aktuator','Proteksi low water / flame failure'],
+s:[],k:'marine auxiliary boiler burner electrical control system'});
+Q({n:51,c:'boil',t:['S','P'],q:'Apa saja proteksi pada auxiliary boiler dan mengapa penting?',
+f:'Sensor → relay → trip bahan bakar · alarm · interlock',
+a:'Proteksi utama:\n- Low water level: memutus bahan bakar bila air ketel rendah (bisa merusak tube)\n- Flame failure: memutus bahan bakar bila api padam\n- High steam pressure: memutus pembakaran saat tekanan berlebih\n- High temperature (untuk boiler minyak termal)\n- Low fuel oil pressure/temperature\n- Fan failure\nProteksi ini fail-safe: bila sensor atau sirkuit gagal, boiler harus berhenti dengan aman.',
+p:['Low water level','Flame failure','High pressure','Sensor dan fail-safe','Reset dan start ulang'],
+s:[],k:'marine boiler protection low water flame failure'});
+Q({n:52,c:'boil',t:['P','K'],q:'Bagaimana urutan start auxiliary boiler secara electrical?',
+f:'Pre-purge → ignition → flame proved → main burner → modulasi → shutdown',
+a:'Urutan start boiler:\n1. Start fan untuk pre-purge (membuang gas sisa)\n2. Buka valve bahan bakar, igniter menyala\n3. Flame detector mendeteksi api, igniter off\n4. Main burner menyala, pembakaran stabil\n5. Kontrol modulasi menyesuaikan bahan bakar dan udara sesuai tekanan steam\n6. Bila flame hilang atau tekanan tinggi, shutdown otomatis\nLogika ini dijalankan oleh burner control panel dengan timer dan relay/sensor.',
+p:['Pre-purge dan fan','Igniter dan flame detector','Main burner','Modulasi bahan bakar/udara','Shutdown otomatis'],
+s:[],k:'marine boiler start sequence purge ignition flame detector'});
+Q({n:53,c:'boil',t:['P','S'],q:'Apa itu exhaust gas economizer dan bagaimana hubungannya dengan listrik?',
+f:'Exhaust gas → pemanas air → steam tambahan  |  Sensor dan alarm listrik memantau',
+a:'Exhaust gas economizer memanfaatkan panas gas buang Main Engine untuk menghasilkan steam tambahan. Alat ini sendiri tidak memerlukan banyak listrik, tetapi:\n- Sensor suhu dan tekanan mengirim sinyal ke sistem alarm\n- Valve kontrol dan pompa sirkulasi air dipasang\n- Sistem soot blowing digerakkan motor listrik\n- Alarm dan proteksi terhubung ke alarm panel',
+p:['Prinsip economizer','Pompa sirkulasi','Soot blower elektrik','Sensor dan alarm','Hubungan dengan steam system'],
+s:[],k:'marine exhaust gas economizer soot blower electrical'});
+Q({n:54,c:'boil',t:['P','K'],q:'Bagaimana sistem pembakaran bahan bakar boiler diatur secara elektrik?',
+f:'Thermostat / pressure transmitter → burner control → modulator → servo / valve → bahan bakar + udara',
+a:'Kontrol pembakaran mengatur jumlah bahan bakar dan udara agar sesuai permintaan steam.\nPressure transmitter atau thermostat mengirim sinyal permintaan ke burner control. Kontrol menggerakkan servo motor untuk mengatur katup bahan bakar dan damper udara.\nRasio udara/bahan bakar dijaga agar pembakaran efisien. Sensor oksigen atau CO membantu tuning. Semua aktuator ini adalah beban listrik.',
+p:['Pressure transmitter','Servo motor katup dan damper','Rasio udara/bahan bakar','Sensor oksigen','Tuning pembakaran'],
+s:[],k:'marine boiler combustion control servo modulator'});
+Q({n:55,c:'boil',t:['P','S'],q:'Apa itu boiler water level control dan bagaimana sensornya bekerja?',
+f:'Sensor level → controller → pompa feed → valve → level terjaga',
+a:'Level air boiler harus dijaga dalam rentang aman. Sensor level (float, electrode, atau differential pressure) mengirim sinyal ke controller.\nController mengatur kecepatan atau start/stop pompa feed water lewat kontaktor atau VFD, serta mengatur valve.\nAlarm low dan high level memberi peringatan. Bila level sangat rendah, proteksi memutus bahan bakar untuk melindungi tube.',
+p:['Sensor level: float, electrode, DP cell','Pompa feed water','Kontrol level tiga elemen','Alarm low/high level','Interlock dengan bahan bakar'],
+s:['dol'],k:'marine boiler water level control electrode pump feed'});
+
+/* ---- IV. Purifier (56–59) ---- */
+Q({n:56,c:'pur',t:['P'],q:'Bagaimana electrical system pada purifier (fuel / lube oil) di kapal?',
+f:'MSB → feeder → starter → motor bowl → separator  |  panel kontrol: heater, timer, solenoid',
+a:'Purifier memakai motor utama untuk memutar bowl pada kecepatan tinggi (sering lewat bel/gear atau direct drive dengan VFD).\nMotor distart dengan starter khusus (DOL atau soft starter) karena inersia bowl besar. Heating element listrik memanaskan bahan bakar atau minyak sebelum masuk separator.\nPanel kontrol mengatur timer untuk sludge discharge, solenoid valve untuk air sealing, dan sensor suhu. Semuanya adalah beban listrik yang harus diproteksi.',
+p:['Motor bowl dan starter','Heater listrik','Timer sludge discharge','Solenoid valve','Panel kontrol purifier'],
+s:['dol','yd'],k:'marine purifier fuel oil separator electrical motor starter'});
+Q({n:57,c:'pur',t:['K','P'],q:'Mengapa purifier menggunakan starter khusus dan bukan DOL biasa?',
+f:'Inersia bowl besar → arus start tinggi → butuh soft starter atau star-delta',
+a:'Bowl purifier sangat berat dan berputar pada kecepatan tinggi. Saat start, inersia beban besar sehingga motor butuh waktu lebih lama untuk mencapai putaran penuh dan arus start mengalir lebih lama.\nUntuk membatasi arus, beberapa purifier memakai soft starter, star-delta, atau VFD. Starter juga melindungi motor dari arus berlebih yang berkepanjangan.\nSetelah mencapai putaran penuh, purifier sering butuh waktu percepatan tertentu sebelum pengisian bahan bakar dimulai.',
+p:['Inersia beban besar','Arus start berkepanjangan','Soft starter, star-delta, VFD','Proteksi motor','Waktu percepatan sebelum proses'],
+s:['yd'],k:'marine purifier bowl starting current soft starter'});
+Q({n:58,c:'pur',t:['K','S'],q:'Apa itu sludge discharge dan bagaimana ia dikendalikan secara elektrik?',
+f:'Timer → solenoid / valve → buka salur → sludge keluar → tutup kembali',
+a:'Sludge discharge membersihkan endapan dari bowl secara otomatis. Sistem kontrol mengatur timer yang membuka katup atau menggerakkan aktuator untuk membuang sludge ke sludge tank.\nSetelah itu aliran ditutup kembali dan purifier siap untuk siklus berikutnya. Timer dan solenoid valve ini adalah komponen listrik.\nKesalahan timer bisa membuat sludge keluar ke sistem minyak bersih. Karena itu sensor dan alarm terpasang untuk memantau siklusnya.',
+p:['Timer siklus','Solenoid atau aktuator valve','Sensor konfirmasi','Alarm kegagalan','Pemilihan mode: sludge atau total discharge'],
+s:[],k:'marine purifier sludge discharge timer solenoid'});
+Q({n:59,c:'pur',t:['P','S'],q:'Apa saja proteksi dan alarm penting pada purifier?',
+f:'Overload · vibration · temperature · low pressure · alarm panel',
+a:'Proteksi penting pada purifier:\n- Overload motor bowl\n- Getaran berlebih (vibration switch)\n- Suhu bantalan tinggi\n- Tekanan minyak pelumas rendah pada gearbox\n- Level sludge tank tinggi\n- Tekanan atau aliran bahan bakar tidak sesuai\nAlarm terhubung ke panel purifier dan ke ECR. Jika salah satu proteksi trip, purifier harus distop, diperiksa, lalu di-start ulang dengan prosedur khusus.',
+p:['Overload motor','Vibration switch','Bearing temperature','Oil pressure','Alarm ke ECR'],
+s:[],k:'marine purifier alarm protection vibration overload'});
+
+/* ---- V. Compressed Air (60–62) ---- */
+Q({n:60,c:'air',t:['P','K'],q:'Bagaimana electrical system kompresor udara kapal?',
+f:'MSB → feeder → starter → motor → kompresor → receiver  |  kontrol: pressure switch, unloader, timer',
+a:'Kompresor udara ditenagai motor listrik (kadang dua stage dengan motor terpisah). Starter bisa DOL untuk kompresor kecil, star-delta atau soft starter untuk yang besar.\nKontrol kompresor memakai pressure switch untuk start/stop otomatis berdasarkan tekanan receiver, unloader untuk melepas beban saat start, dan timer untuk drain.\nProteksi: high air temperature, low oil pressure, overload motor, dan safety valve mekanik.',
+p:['Motor dan starter','Pressure switch start/stop','Unloader dan drain valve','Proteksi: temperature dan pressure','Motor dua stage'],
+s:['dol','yd'],k:'marine air compressor motor starter pressure switch'});
+Q({n:61,c:'air',t:['S','K'],q:'Apa fungsi unloading valve dan bagaimana dikendalikan?',
+f:'Start → unloader buka → motor ringan → unloader tutup → beban penuh',
+a:'Unloading valve membuat kompresor mulai tanpa beban dengan melepas udara dari silinder.\nAkibatnya motor start lebih ringan dan arus start lebih rendah. Setelah motor mencapai putaran, unloader menutup dan kompresor mulai memampatkan udara.\nUnloader bisa digerakkan solenoid valve atau tekanan udara sendiri, dan sering bekerja bersama timer. Ini contoh control system yang melindungi motor (safety).',
+p:['Fungsi unloader','Solenoid atau pneumatic','Timer dan urutan','Hubungan dengan pressure switch','Akibat bila unloader gagal'],
+s:[],k:'marine air compressor unloader solenoid control'});
+Q({n:62,c:'air',t:['S'],q:'Apa saja proteksi pada sistem compressed air?',
+f:'Pressure switch · safety valve · high temp · low oil pressure · drain',
+a:'Proteksi compressed air:\n- Pressure switch memutus motor saat tekanan receiver tercapai, dan menyalakan kembali saat turun\n- Safety valve mekanik mencegah overpressure\n- High air temperature alarm\n- Low oil pressure trip\n- Drain otomatis atau manual mencegah kondensat menumpuk\n- Auto start untuk kompresor cadangan bila tekanan turun di bawah batas',
+p:['Pressure switch','Safety valve','High temperature','Low oil pressure','Drain dan auto start'],
+s:[],k:'marine compressed air protection safety valve pressure'});
+
+/* ---- VI. Pumps & Engine Room (63–65) ---- */
+Q({n:63,c:'pump',t:['P'],q:'Apa saja jenis pompa listrik di engine room?',
+f:'Centrifugal (paling umum) · Positive displacement · Screw · Gear · Submersible',
+a:'Jenis pompa yang umum:\n- Centrifugal: untuk transfer, cooling, ballast, fire. Cocok untuk kapasitas besar.\n- Positive displacement (piston, screw, gear): untuk minyak pelumas, bahan bakar, sludge.\n- Submersible: pompa bilge atau drain di tangki.\n- Pompa dosing: untuk chemical treatment.\nMasing-masing digerakkan motor listrik dengan starter sesuai daya dan jenis beban.',
+p:['Centrifugal','Positive displacement','Screw dan gear','Submersible','Pompa dosing'],
+s:['dol'],k:'marine engine room pumps types electric motor'});
+Q({n:64,c:'pump',t:['P','S'],q:'Bagaimana pompa standby bekerja secara otomatis?',
+f:'Sensor (pressure / level / flow) → relay start → pompa standby → alarm',
+a:'Pompa penting seperti pompa pelumas, cooling water, dan fire pump dipasang main dan standby.\nSaat pompa utama gagal (motor trip, breaker trip, atau tekanan turun), sensor (pressure switch, flow switch, level switch) mengirim sinyal ke relay kontrol yang langsung menstart pompa standby.\nAlarm berbunyi untuk memberi tahu operator. Bila keduanya gagal, safety system akan mengurangi beban atau mematikan engine. Ini contoh nyata kerja sama power + control + safety.',
+p:['Main dan standby','Sensor pressure / level / flow','Auto start logika','Alarm dan indikasi','Interlock dengan engine shutdown'],
+s:['seq'],k:'marine pump standby auto start pressure switch'});
+Q({n:65,c:'pump',t:['P','K'],q:'Bagaimana motor pompa dilindungi?',
+f:'MCCB → kontaktor → overload → motor  |  + sensor: pressure, temperature, vibration',
+a:'Motor pompa dilindungi dari dua sisi.\nSisi listrik: MCCB untuk hubung singkat, kontaktor untuk start/stop, overload relay untuk arus berlebih.\nSisi proses: pressure switch (dry run), flow switch (no flow), temperature sensor (overheat), vibration sensor (bearing rusak).\nBila salah satu sensor trip, kontaktor dilepas dan pompa berhenti. Alarm dikirim ke ECR. Reset harus manual setelah penyebab diperiksa.',
+p:['MCCB, kontaktor, overload','Dry run protection','Temperature dan vibration','Alarm dan reset','Uji proteksi berkala'],
+s:['dol'],k:'marine pump motor protection dry run overload'});
+
+/* ---- VII. Tutorial Simulator (66–70) ---- */
+Q({n:66,c:'tut',t:['P','K'],q:'Bagaimana self-holding (kontak 13-14) bekerja pada rangkaian DOL?',
+f:'START → koil KM1 → kontak bantu 13-14 menutup → lepas START → tetap menyala',
+a:'Kontak bantu 13-14 adalah kontak NO yang terpasang paralel dengan tombol START.\nSaat START ditekan, koil KM1 energize dan semua kontak KM1 (termasuk 13-14) berpindah. Kontak bantu 13-14 menutup, sehingga arus kontrol tetap mengalir walau START sudah dilepas.\nInilah self-holding. Untuk menghentikan motor, kita harus memutus jalur ini dengan tombol STOP (NC) atau overload (NC 95-96).',
+p:['Fungsi kontak bantu','Paralel dengan START','STOP sebagai pemutus','Overload dalam jalur holding','Praktik pada simulator DOL'],
+s:['dol'],k:'DOL starter self holding contact 13-14 motor control'});
+Q({n:67,c:'tut',t:['P','K'],q:'Mengapa kontaktor KM1 dan KM2 pada FWD/REV tidak boleh menyala bersamaan?',
+f:'KM1 dan KM2 aktif bersama → dua fasa bertabrakan → hubung singkat',
+a:'Pada FWD/REV, KM2 menukar dua fasa. Bila KM1 dan KM2 aktif bersamaan, dua fasa akan bertabrakan langsung di titik sambungan dan menimbulkan hubung singkat antar fasa.\nUntuk mencegahnya, dipasang interlock elektrik: kontak NC KM1 dimasukkan ke rangkaian koil KM2, dan sebaliknya. Bila KM1 menyala, KM2 tidak bisa aktif.\nSebagai pelindung tambahan, banyak starter juga memakai interlock mekanik (mechanical interlock) yang memasang tuas.\nDi simulator, coba tekan REV saat FWD masih jalan: sistem menolak karena interlock, dan pesan ini muncul di log.',
+p:['Akibat dua kontaktor aktif','Interlock elektrik NC','Interlock mekanik','Pesan penolakan di simulator','Latihan: coba REV saat FWD'],
+s:['fr'],k:'forward reverse interlock contactor short circuit motor'});
+Q({n:68,c:'tut',t:['P','K'],q:'Bagaimana timer KT bekerja pada Star-Delta dan Sequence 2 Motor?',
+f:'Koil KT energize → hitung waktu → kontak NC lepas / NO menutup → langkah berikutnya',
+a:'Timer KT menyala saat diberi tegangan. Setelah waktu yang di-set (misalnya 4 detik), dua kontaknya berpindah:\n- Kontak NC (55-56) membuka, memutus KM3 (star)\n- Kontak NO (67-68) menutup, memungkinkan KM2 (delta) aktif\nPada Sequence 2 Motor, timer menunda start motor kedua. Hasilnya motor kedua hanya jalan setelah motor pertama stabil.\nDi simulator, timer divisualisasikan dengan bilah kemajuan. Setelah timer selesai, langkah berikutnya di daftar urutan kerja menyala.',
+p:['Koil KT dan tegangan kontrol','Kontak NC 55-56','Kontak NO 67-68','Aplikasi di Star-Delta','Aplikasi di Sequence 2 Motor'],
+s:['yd','seq'],k:'timer on delay relay star delta sequence motor control'});
+Q({n:69,c:'tut',t:['S','K'],q:'Apa fungsi overload relay dan mengapa kontaknya 95-96 dipakai di rangkaian kontrol?',
+f:'Arus berlebih → bimetal panas → 95-96 (NC) membuka → koil KM1 lepas → motor berhenti',
+a:'Overload relay mendeteksi arus yang melebihi setting untuk waktu tertentu. Di dalamnya ada elemen bimetal atau sensor elektronik yang memanas karena arus.\nBila ambang terlewati, kontak NC 95-96 membuka dan kontak NO 97-98 menutup.\nKontak 95-96 diletakkan di jalur koil KM1, sehingga saat terbuka, koil kehilangan tegangan dan motor berhenti.\nKontak 97-98 dipakai untuk alarm atau indikasi trip ke ECR. Reset dilakukan dengan tombol manual atau otomatis setelah elemen dingin.\nDi simulator, tekan Overload OL1 saat motor jalan: KM1 lepas, lampu TRIP menyala, motor melambat.',
+p:['Prinsip bimetal dan sensor','Kontak 95-96 (NC)','Kontak 97-98 (NO)','Reset manual dan otomatis','Uji di simulator'],
+s:['dol','yd','fr','seq'],k:'overload relay 95-96 NC thermal motor protection'});
+Q({n:70,c:'tut',t:['P','K','S'],q:'Setelah semua simulator diuji, bagaimana cara membaca satu mesin dengan tiga lensa?',
+f:'Power → Control → Safety · selalu tanyakan tiga hal untuk setiap mesin',
+a:'Pola membaca satu mesin dengan tiga lensa:\n1. Electrical Power: dari mana daya datang, rating, proteksi apa di jalur daya.\n2. Control / Electronic: bagaimana perintah diberikan, sensor apa yang dipakai, logika apa yang berjalan.\n3. Safety System: alarm apa, proteksi apa, apa yang terjadi bila gagal, bagaimana pemulihannya.\nCoba terapkan pola ini pada pompa pelumas Main Engine, purifier, boiler, atau steering gear.\nPola inilah yang membedakan belajar listrik kapal dari sekadar menghafal simbol.',
+p:['Tiga lensa untuk setiap mesin','Contoh: pompa pelumas','Contoh: purifier','Contoh: steering gear','Latihan mandiri'],
+s:['dol','yd','fr','seq'],k:'marine machinery three lens electrical power control safety'});
+
+/* ---- VIII. Bridge & Navigation (71–90) ---- */
+Q({n:71,c:'brg',t:['P','S'],q:'Bagaimana sistem kelistrikan anjungan (bridge) dipasok dan diamankan?',
+f:'MSB / ESB → changeover → bridge distribution board → UPS / 24 V DC → peralatan navigasi',
+a:'Peralatan anjungan sangat penting, jadi disuplai dari dua sumber: MSB (normal) dan ESB atau emergency source, dengan changeover otomatis.\nDari bridge distribution board, beban sensitif dilewatkan UPS atau baterai 24 V DC agar tidak mati saat sumber berpindah.\nSetiap peralatan dilindungi breaker terpisah sehingga gangguan satu alat tidak mematikan semuanya.',
+p:['Dua sumber dan changeover','Bridge distribution board','UPS dan 24 V DC','Proteksi per peralatan','Beban emergency di anjungan'],
+s:[],k:'ship bridge power supply distribution UPS emergency changeover'});
+Q({n:72,c:'brg',t:['P','S'],q:'Bagaimana electrical system Steering Gear electro-hydraulic?',
+f:'MSB (2 feeder) → starter → motor pompa hidrolik → ram / silinder → rudder stock',
+a:'Steering gear electro-hydraulic memakai motor listrik yang memutar pompa hidrolik, biasanya dengan dua unit daya.\nOli dialirkan ke ram atau silinder yang memutar rudder stock. Arah dan sudut kemudi diatur lewat katup solenoid atau pompa variable displacement yang dikendalikan sinyal dari anjungan.\nMotor memakai starter DOL. Kedua unit daya disuplai dari feeder terpisah, sehingga satu kegagalan tidak menghilangkan kemudi.',
+p:['Motor dan pompa hidrolik','Dua unit daya','Solenoid valve dan kontrol','Ram dan rudder stock','Starter motor'],
+s:['dol'],k:'ship electro hydraulic steering gear power unit motor'});
+Q({n:73,c:'brg',t:['K','P'],q:'Bagaimana sinyal dari kemudi atau autopilot sampai rudder bergerak?',
+f:'Helm / autopilot → steering control → solenoid / pompa → rudder → rudder angle feedback',
+a:'Perintah dari helm atau autopilot (sinyal listrik) masuk ke steering gear control.\nControl mengatur solenoid atau pompa sehingga rudder bergerak.\nRudder angle transmitter mengirim posisi aktual kembali ke control dan ke anjungan (rudder angle indicator).\nSistem follow-up menghentikan rudder saat sudutnya sama dengan perintah; non-follow-up menggerakkan rudder selama tombol ditekan.',
+p:['Follow-up dan non-follow-up','Rudder angle transmitter','Rudder angle indicator','Pilihan kontrol: autopilot, helm, NFU','Pindah kontrol dari anjungan ke steering room'],
+s:[],k:'ship steering gear control follow-up non-follow-up rudder'});
+Q({n:74,c:'brg',t:['S','P'],q:'Apa proteksi dan alarm khusus pada steering gear?',
+f:'2 sirkuit dari MSB · proteksi hubung singkat · alarm overload · alarm kehilangan daya',
+a:'Steering gear termasuk sistem paling kritis. SOLAS II-1 mensyaratkan suplai lewat minimal dua sirkuit terpisah dari MSB.\nProteksi motor hanya untuk hubung singkat; overload tidak men-trip tetapi memberi alarm, supaya steering tidak berhenti mendadak.\nAlarm lain yang lazim: kehilangan fasa, kehilangan daya kontrol, level oli rendah, dan status motor running yang tampil di anjungan dan kamar mesin.',
+p:['Dua sirkuit dari MSB','Proteksi short circuit saja','Alarm overload','Alarm kehilangan daya','Indikasi running di anjungan'],
+s:[],k:'SOLAS II-1 steering gear power circuits alarm overload'});
+Q({n:75,c:'brg',t:['S','P'],q:'Bagaimana emergency steering dan daya daruratnya?',
+f:'Daya hilang → ESB / emergency source → auxiliary steering → test sebelum berangkat',
+a:'Bila steering utama gagal, auxiliary steering gear (atau unit daya lain) harus mengambil alih dalam waktu singkat.\nEmergency steering mengandalkan sumber darurat dan, bila perlu, kemudi manual dari steering room dengan komunikasi ke anjungan.\nAturan SOLAS juga mensyaratkan pengujian steering gear sebelum berangkat (termasuk pengalihan ke sumber alternatif) dan latihan darurat berkala.',
+p:['Auxiliary steering gear','Suplai dari emergency source','Kontrol lokal di steering room','Komunikasi anjungan dan steering room','Test sebelum berangkat'],
+s:[],k:'SOLAS V 26 steering gear test emergency steering'});
+Q({n:76,c:'brg',t:['K'],q:'Bagaimana autopilot bekerja?',
+f:'Heading gyro → autopilot (PID) → perintah rudder → rudder angle → heading baru',
+a:'Autopilot membandingkan heading yang diinginkan dengan heading aktual dari gyro compass, lalu menghitung perintah kemudi (algoritma PID dengan penyesuaian kondisi laut). Perintah dikirim ke steering gear control.\nAutopilot menyediakan alarm off-heading dan harus bisa diambil alih ke kemudi manual dengan cepat.\nMode track control memakai ECDIS dan GPS untuk mengikuti jalur pelayaran.',
+p:['Input heading dari gyro','PID dan sensitivitas','Alarm off-heading','Pindah ke manual','Track control'],
+s:[],k:'marine autopilot heading control PID gyro off-heading'});
+Q({n:77,c:'brg',t:['P','K'],q:'Bagaimana electrical system Gyro Compass?',
+f:'Suplai listrik → rotor gyro berputar → north-seeking → heading ke repeater, radar, ECDIS',
+a:'Gyro compass memakai rotor yang berputar cepat dan menunjuk utara sejati (true north) dengan memanfaatkan rotasi bumi.\nRotor digerakkan motor listrik dari suplai khusus, dan sistem membutuhkan waktu settling beberapa jam sebelum akurat.\nHeading dikirim ke repeater, radar, ECDIS, autopilot, AIS, dan VDR. Sistem ini sensitif terhadap kehilangan daya dan biasanya ditopang UPS atau baterai.',
+p:['Rotor dan north-seeking','Waktu settling','Koreksi kecepatan dan lintang','Repeater dan transmitting heading device','Suplai dan UPS'],
+s:[],k:'marine gyro compass principle settling time heading output'});
+Q({n:78,c:'brg',t:['K','S'],q:'Apa fungsi Magnetic Compass dan bagaimana dengan deviasi?',
+f:'Medan bumi → kompas magnet → heading magnetik → koreksi variasi dan deviasi',
+a:'Kompas magnet adalah alat navigasi yang tidak bergantung listrik dan menjadi cadangan saat gyro gagal.\nIa menunjuk utara magnetik, sehingga harus dikoreksi dengan variasi (lokasi) dan deviasi (pengaruh besi kapal).\nPenerangan kompas disuplai listrik, tetapi kompas tetap bisa dibaca bila padam.\nDeviasi dicek dan dikoreksi berkala oleh compass adjuster.',
+p:['Variasi dan deviasi','Compass card dan binnacle','Penerangan kompas','Pengecekan error','Fungsi cadangan'],
+s:[],k:'marine magnetic compass deviation variation compass adjuster'});
+Q({n:79,c:'brg',t:['K','P'],q:'Bagaimana GPS/GNSS bekerja dan dari mana dayanya?',
+f:'Satelit → antena → receiver (posisi, waktu) → ECDIS, radar, AIS, VDR',
+a:'Receiver GNSS menghitung posisi dari sinyal beberapa satelit berdasarkan selisih waktu tempuh.\nOutputnya (posisi, kecepatan, waktu) dikirim ke ECDIS, radar, AIS, VDR, dan GMDSS lewat jaringan data.\nReceiver disuplai dari bridge DC atau UPS. Gangguan sinyal (jamming, spoofing, antena rusak) harus dikenali dengan cross-check posisi dari sumber lain.',
+p:['Satelit dan antena','Posisi, kecepatan, waktu','Output ke peralatan lain','Gangguan sinyal','Cross-check posisi'],
+s:[],k:'marine GNSS GPS receiver bridge navigation data output'});
+Q({n:80,c:'brg',t:['K','P','S'],q:'Apa itu ECDIS dan bagaimana electrical system serta datanya?',
+f:'ENC + posisi GPS + heading gyro + speed log → ECDIS → peta, alarm, rute',
+a:'ECDIS menampilkan peta elektronik resmi (ENC) dengan posisi kapal, rute, dan alarm keselamatan.\nDatanya berasal dari GNSS, gyro compass, speed log, dan sensor lain, ditambah pembaruan ENC.\nECDIS disuplai dari dua sumber dan UPS, dan SOLAS mensyaratkan adanya backup (ECDIS kedua atau peta kertas).\nAlarm penting: safety contour, cross-track error, dan kehilangan input sensor.',
+p:['ENC dan pembaruan','Input sensor','Alarm safety contour dan XTE','Backup ECDIS','Sumber daya dan UPS'],
+s:[],k:'ECDIS electronic chart display IMO SOLAS V ENC backup'});
+Q({n:81,c:'brg',t:['K','P','S'],q:'Bagaimana Radar dan ARPA bekerja secara electrical?',
+f:'Transmitter → antena berputar → echo → receiver → display / ARPA tracking',
+a:'Radar memancarkan pulsa gelombang mikro dari antena yang diputar motor, lalu menerima pantulannya.\nDari waktu tempuh dan arah antena, radar menghitung jarak dan bearing.\nARPA melacak target dan menghitung CPA/TCPA untuk mencegah tubrukan.\nRadar butuh suplai stabil, dan modul pemancar membutuhkan pemanasan sebelum dipakai. Ada risiko radiasi dekat antena, jadi ada prosedur keselamatan saat perawatan.',
+p:['X-band dan S-band','Pemancar dan penerima','Motor antena','ARPA, CPA, TCPA','Keselamatan radiasi'],
+s:[],k:'marine radar ARPA CPA TCPA transmitter antenna'});
+Q({n:82,c:'brg',t:['K','P'],q:'Bagaimana AIS bekerja dan apa sumber datanya?',
+f:'GNSS + gyro + data kapal → transponder AIS (VHF) → kapal dan stasiun lain',
+a:'AIS adalah transponder VHF yang otomatis mengirim identitas, posisi, haluan, dan kecepatan kapal ke kapal dan stasiun darat di sekitar.\nPosisi berasal dari GNSS dan heading dari gyro. Data statis (nama, MMSI, dimensi) diisi saat instalasi, sedangkan data pelayaran diisi oleh perwira.\nAIS dipasok dari sumber utama dan emergency, dan hasilnya tampil di radar atau ECDIS.',
+p:['Transponder VHF','Sumber data','Data statis dan pelayaran','Tampilan di radar dan ECDIS','Sumber daya'],
+s:[],k:'marine AIS transponder class A MMSI data'});
+Q({n:83,c:'brg',t:['K'],q:'Bagaimana Echo Sounder dan Speed Log bekerja?',
+f:'Transduser → gelombang suara → pantulan → kedalaman / kecepatan',
+a:'Echo sounder mengirim pulsa ultrasonik dari transduser di lambung dan menghitung kedalaman dari waktu pantulan.\nSpeed log mengukur kecepatan terhadap air atau dasar laut, misalnya dengan prinsip Doppler atau electromagnetic.\nKedua data dikirim ke ECDIS dan peralatan lain. Kegagalan sensor bisa membuat ECDIS menampilkan data yang salah, jadi perlu cross-check.',
+p:['Transduser dan lambung','Kedalaman dan keel clearance','Speed through water dan over ground','Output ke ECDIS dan VDR','Troubleshooting sensor'],
+s:[],k:'marine echo sounder speed log doppler electromagnetic'});
+Q({n:84,c:'brg',t:['S','K'],q:'Apa fungsi VDR dan BNWAS?',
+f:'VDR: merekam data anjungan  |  BNWAS: alarm bila perwira jaga tidak merespons',
+a:'VDR (Voyage Data Recorder) merekam data pelayaran dan suara anjungan dalam kapsul penyimpanan untuk investigasi kecelakaan.\nVDR punya sumber daya cadangan agar tetap merekam sesaat setelah blackout.\nBNWAS (Bridge Navigational Watch Alarm System) mengingatkan perwira jaga secara berkala; bila tidak merespons, alarm meningkat ke tingkat berikutnya. Keduanya perangkat safety yang diatur SOLAS bab V.',
+p:['Data yang direkam VDR','Kapsul dan cadangan daya','Tingkat alarm BNWAS','Reset dan pengujian','Aturan SOLAS V'],
+s:[],k:'marine VDR voyage data recorder BNWAS bridge watch alarm'});
+Q({n:85,c:'brg',t:['S','P'],q:'Bagaimana GMDSS dan sumber dayanya?',
+f:'Daya utama → ESB → baterai cadangan GMDSS → radio VHF, MF/HF, EPIRB, NAVTEX',
+a:'GMDSS adalah sistem komunikasi darurat dan keselamatan kapal: radio VHF, MF/HF dengan DSC, NAVTEX, EPIRB, dan SART.\nPeralatan ini disuplai dari tiga lapis sumber: daya utama, emergency source, dan baterai cadangan khusus.\nBaterai cadangan harus mampu menjalankan peralatan selama waktu minimal yang diatur SOLAS bab IV, sehingga baterai dirawat dan diuji berkala.',
+p:['Radio VHF dan MF/HF DSC','NAVTEX dan EPIRB','Tiga sumber daya','Baterai cadangan dan pengujian','Aturan SOLAS IV'],
+s:[],k:'GMDSS reserve source battery power supply SOLAS IV'});
+Q({n:86,c:'brg',t:['P','S'],q:'Bagaimana electrical system navigation lights dan sinyal suara?',
+f:'Panel lampu navigasi → lampu (masthead, sidelight, stern, anchor) → alarm kegagalan lampu',
+a:'Lampu navigasi diatur oleh panel kontrol yang memuat breaker tiap lampu dan indikator kerusakan.\nSistem memberi alarm bila lampu padam dan sering punya dua sumber suplai serta lampu cadangan.\nPenempatan dan warna lampu mengikuti COLREG. Sinyal suara (whistle) dan lampu sinyal siang hari juga bergantung pada suplai listrik anjungan.',
+p:['Panel lampu navigasi','Alarm lampu padam','Suplai ganda','Lampu utama dan cadangan','COLREG'],
+s:[],k:'ship navigation lights panel failure alarm COLREG'});
+Q({n:87,c:'brg',t:['K','P','S'],q:'Bagaimana engine telegraph dan bridge control Main Engine bekerja?',
+f:'Handle anjungan → sinyal ke ECR / remote control → governor / aktuator Main Engine',
+a:'Handle di anjungan mengirim perintah putaran atau arah ke sistem remote control Main Engine di kamar mesin.\nSistem ini mengatur governor serta urutan start dan reversing dengan interlock. Engine order telegraph tetap ada sebagai cadangan komunikasi perintah.\nPemindahan kontrol antara anjungan, ECR, dan lokal dilakukan dengan prosedur dan indikator yang jelas.',
+p:['Remote control Main Engine','Telegraph','Pemindahan kontrol anjungan, ECR, lokal','Interlock dan safety','Alarm dan indikasi'],
+s:[],k:'marine bridge control main engine remote control telegraph'});
+Q({n:88,c:'brg',t:['K'],q:'Bagaimana peralatan navigasi bertukar data (NMEA)?',
+f:'Sensor → NMEA 0183 / 2000 → ECDIS, radar, AIS, VDR, autopilot',
+a:'Peralatan navigasi bertukar data lewat standar NMEA 0183 (serial), NMEA 2000, atau jaringan Ethernet.\nSensor seperti GNSS, gyro, speed log, dan anemometer menjadi sumber, sedangkan ECDIS, radar, AIS, VDR, dan autopilot memakai data itu.\nPutusnya satu sumber data bisa memengaruhi banyak peralatan sekaligus, jadi perlu memahami jalur data dan sumber cadangannya.',
+p:['NMEA 0183 dan 2000','Sentence dan sumber data','Ethernet dan jaringan anjungan','Single point of failure','Pengujian data'],
+s:[],k:'marine NMEA 0183 2000 bridge data network navigation'});
+Q({n:89,c:'brg',t:['S','K'],q:'Bagaimana alarm di anjungan dikelola (general alarm dan alarm mesin)?',
+f:'Sensor mesin → alarm system → ECR → alarm di anjungan dan ruang perwira',
+a:'Alarm mesin dari ECR diteruskan ke anjungan dan ruang perwira (extension alarm), termasuk panggilan masinis (engineers call).\nGeneral alarm membunyikan sirene dan alarm di seluruh kapal untuk keadaan darurat.\nBridge alarm management menyaring alarm supaya perwira jaga tidak kebanjiran informasi.\nAlarm penting punya sumber daya darurat sehingga tetap berbunyi saat blackout.',
+p:['Machinery alarm extension','Engineers call','General alarm','Acknowledge dan silence','Suplai darurat alarm'],
+s:[],k:'ship bridge alarm management general alarm machinery extension'});
+Q({n:90,c:'brg',t:['S','P'],q:'Apa yang terjadi pada peralatan anjungan saat blackout, dan bagaimana troubleshooting-nya?',
+f:'Blackout → UPS / baterai menopang → ESB menyuplai → cek urutan pemulihan',
+a:'Saat blackout, UPS dan baterai menopang peralatan sensitif sesaat, lalu emergency generator menyuplai ESB.\nPeralatan seperti gyro, radar, dan ECDIS mungkin restart atau butuh waktu pemanasan. Steering gear harus segera pulih.\nTroubleshooting: cek sumber MSB dan ESB, breaker bridge distribution, UPS dan baterai, fuse tiap peralatan, lalu data input. Catat alarm untuk laporan.',
+p:['UPS dan baterai','ESB dan changeover','Waktu restart peralatan','Cek breaker dan fuse','Cross-check dengan peralatan cadangan'],
+s:[],k:'ship blackout bridge equipment UPS gyro radar ECDIS restart'});
+
+/* =====================================================================
+   2. KATEGORI, TAG, SIMULATOR
+   ===================================================================== */
+var CATS=[
+{id:'dsr',no:'A',nm:'Dasar Kelistrikan Kapal'},
+{id:'gp',no:'B',nm:'Generating Plant & Switchboard'},
+{id:'dist',no:'C',nm:'Distribusi, Emergency & Daya Cadangan'},
+{id:'mot',no:'D',nm:'Motor & Starter'},
+{id:'prot',no:'E',nm:'Proteksi, Kabel & Keselamatan'},
+{id:'me',no:'I',nm:'Main Engine & Propulsion'},
+{id:'gen',no:'II',nm:'Generator / Generating Plant'},
+{id:'boil',no:'III',nm:'Boiler & Steam System'},
+{id:'pur',no:'IV',nm:'Purifier'},
+{id:'air',no:'V',nm:'Compressed Air'},
+{id:'pump',no:'VI',nm:'Pumps & Engine Room'},
+{id:'tut',no:'VII',nm:'Tutorial Simulator'},
+{id:'brg',no:'VIII',nm:'Bridge & Navigation'}];
+var TAGS={P:'Electrical Power',K:'Control / Electronic',S:'Safety System'};
+var SIMN={dol:'DOL',yd:'Star-Delta',fr:'Fwd-Rev',seq:'Sequence 2 Motor'};
+var SRC=[
+{id:'google',nm:'Google',u:'https://www.google.com/search?q='},
+{id:'youtube',nm:'YouTube',u:'https://www.youtube.com/results?search_query='},
+{id:'pinterest',nm:'Pinterest',u:'https://www.pinterest.com/search/pins/?q='},
+{id:'wikipedia',nm:'Wikipedia',u:'https://en.wikipedia.org/w/index.php?search='},
+{id:'imo',nm:'IMO',u:'https://www.imo.org/en/search/Pages/results.aspx?k='},
+{id:'solas',nm:'SOLAS',u:'https://www.google.com/search?q=SOLAS+'},
+{id:'marpol',nm:'MARPOL',u:'https://www.google.com/search?q=MARPOL+'},
+{id:'iacs',nm:'IACS',u:'https://www.google.com/search?q=IACS+'}];
+var CLS=[
+{nm:'DNV',u:'https://www.dnv.com/'},
+{nm:'Lloyd\'s Register',u:'https://www.lr.org/'},
+{nm:'ABS',u:'https://ww2.eagle.org/'},
+{nm:'Bureau Veritas',u:'https://marine-offshore.bureauveritas.com/'},
+{nm:'ClassNK',u:'https://www.classnk.or.jp/hp/en/'},
+{nm:'RINA',u:'https://www.rina.org/'},
+{nm:'KR',u:'https://www.krs.co.kr/eng/'},
+{nm:'IRS (India)',u:'https://www.irclass.org/'},
+{nm:'BKI',u:'https://www.bki.co.id/'}];
+
+/* =====================================================================
+   3. SIMULATOR STARTER (logika)
+   ===================================================================== */
+(function(){
+var $=function(i){return document.getElementById(i)};
+var qf=false,P={},C={},T={},te=0,td=false,rpm=[0,0],cur=[0,0],ang=[0,0],mode='dol',sel='',sig='',last=performance.now(),hot=[],MD={};
+
+function bt(id,ty,lb,tm){return{id:id,ty:ty,lb:lb,tm:tm,f:function(){return ty=='nc'?!P[id]:!!P[id]}}}
+function kc(co,ty,tm){return{id:co,ty:ty,lb:co,tm:tm,f:function(){return ty=='no'?!!C[co]:!C[co]}}}
+function ol(n){return{id:n,ty:'nc',lb:n,tm:'95-96',f:function(){return !T[n]}}}
+function tc(ty,tm){return{id:'KT',ty:ty,lb:'KT',tm:tm,f:function(){return ty=='no'?td:!td}}}
+function pr(a,b){return{par:[a,b]}}
+function cond(e){return e.par?(cond(e.par[0])||cond(e.par[1])):e.f()}
+function trip(){return Object.keys(T).some(function(k){return T[k]})}
+
+function L(x1,y1,x2,y2,s){return '<line class="w'+(s==2?' hot':s==1?' v':'')+'" x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'"/>'}
+function D(x,y){return '<circle cx="'+x+'" cy="'+y+'" r="3" fill="#cfe3f6"/>'}
+function wires(X,y1,y2,s){return X.map(function(x){return L(x,y1,x,y2,s)}).join('')}
+function blade(X,y1,y2,cl){return X.map(function(x){return '<line class="sym'+(cl?' on':'')+'" x1="'+x+'" y1="'+y1+'" x2="'+(cl?x:x+13)+'" y2="'+y2+'"/>'}).join('')}
+function olb(X,y1,y2){return X.map(function(x){return '<rect x="'+(x-9)+'" y="'+y1+'" width="18" height="'+(y2-y1)+'" rx="3" fill="#0d3156" stroke="#cfe3f6" stroke-width="2"/>'}).join('')}
+function lbl(X){return X.map(function(x,i){return '<text x="'+(x-7)+'" y="16">L'+(i+1)+'</text>'}).join('')}
+function grp(id,x0,y0,x1,y1,t,lx,ly){return '<rect class="cmp grp'+(sel==id?' sel':'')+'" data-id="'+id+'" x="'+x0+'" y="'+y0+'" width="'+(x1-x0)+'" height="'+(y1-y0)+'" rx="6" tabindex="0" role="button" aria-label="'+(t||id)+'"/>'+(t?'<text x="'+lx+'" y="'+ly+'">'+t+'</text>':'')}
+function mot(cx,cy,i,id){var on=Math.abs(rpm[i])>20;
+return '<g id="mr'+i+'" data-cx="'+cx+'" data-cy="'+cy+'" transform="rotate('+ang[i]+' '+cx+' '+cy+')"><circle cx="'+cx+'" cy="'+cy+'" r="30" fill="none" stroke="'+(on?'#35e08a':'#4d6f90')+'" stroke-width="3" stroke-dasharray="14 8"/></g><circle cx="'+cx+'" cy="'+cy+'" r="24" fill="#0d3156" stroke="#cfe3f6" stroke-width="2"/><text x="'+(cx-6)+'" y="'+(cy+2)+'" style="font-size:15px;font-weight:700">M</text><text x="'+(cx-7)+'" y="'+(cy+16)+'">3~</text><text class="m" x="'+(cx+34)+'" y="'+(cy+4)+'">'+id+'</text><rect class="cmp'+(sel==id?' sel':'')+'" data-id="'+id+'" x="'+(cx-32)+'" y="'+(cy-32)+'" width="64" height="64" rx="10" tabindex="0" role="button" aria-label="Motor '+id+'"/>'}
+
+function pDOL(){var X=[80,130,180],k=C.KM1?2:0,q=qf?1:0,h=lbl(X);
+h+=wires(X,22,58,1)+blade(X,58,92,qf)+wires(X,92,130,q)+blade(X,130,164,C.KM1)+wires(X,164,196,k)+olb(X,196,226)+wires(X,226,262,k);
+h+=['U1','V1','W1'].map(function(n,i){return '<text class="m" x="'+(X[i]+5)+'" y="250">'+n+'</text>'}).join('');
+h+=grp('QF1',52,52,208,98,'QF1 MCCB',214,80)+grp('KM1',52,124,208,170,'KM1 Contactor',214,150)+grp('OL1',52,192,208,230,'OL1 Overload',214,214)+mot(130,292,0,'M1');
+return['0 0 300 340',h]}
+
+function upper(X,X2,J,q,hq,k1,k2){var h=lbl(X)+wires(X,22,52,1)+blade(X,52,86,qf);
+X.forEach(function(x,i){h+=L(x,86,x,J[i],hq)+L(x,J[i],x,134,k1||q)+L(x,J[i],X2[i],J[i],k2||q)+L(X2[i],J[i],X2[i],134,k2||q)+D(x,J[i])});
+return h+blade(X,134,168,C.KM1)+blade(X2,134,168,C.KM2)}
+
+function pFR(){var X=[50,90,130],X2=[190,230,270],J=[100,106,112],q=qf?1:0,k1=C.KM1?2:0,k2=C.KM2?2:0,any=(C.KM1||C.KM2)?2:0;
+var h=upper(X,X2,J,q,any||q,k1,k2);
+h+=wires(X,168,204,k1);
+if(C.KM2){h+=L(X[0],184,X[0],204,2)+L(X[1],190,X[1],204,2)+L(X[2],196,X[2],204,2)}
+h+=L(X2[0],168,X2[0],184,k2)+L(X2[2],168,X2[2],190,k2)+L(X2[1],168,X2[1],196,k2);
+h+=L(X[0],184,X2[0],184,k2)+L(X[1],190,X2[2],190,k2)+L(X[2],196,X2[1],196,k2);
+h+=D(X[0],184)+D(X[1],190)+D(X[2],196)+D(X2[0],184)+D(X2[2],190)+D(X2[1],196);
+h+=olb(X,204,232)+wires(X,232,264,any);
+h+=grp('QF1',36,46,144,92,'QF1 MCCB',150,72)+grp('KM1',36,128,144,172,'KM1 FWD',38,122)+grp('KM2',176,128,284,172,'KM2 REV',178,122)+grp('OL1',36,200,144,236,'OL1 Overload',150,222);
+h+='<text class="m" x="150" y="250">KM2 menukar L2\u2194L3</text>'+mot(90,296,0,'M1');
+h+='<text x="76" y="344" style="font-weight:700">'+(rpm[0]>20?'FWD':rpm[0]<-20?'REV':'')+'</text>';
+return['0 0 300 352',h]}
+
+function pSEQ(){var X=[50,90,130],X2=[190,230,270],J=[100,106,112],q=qf?1:0,k1=C.KM1?2:0,k2=C.KM2?2:0,hq=(C.KM1||C.KM2)?2:q;
+var h=upper(X,X2,J,q,hq,k1,k2);
+h+=wires(X,168,200,k1)+olb(X,200,228)+wires(X,228,264,k1)+wires(X2,168,200,k2)+olb(X2,200,228)+wires(X2,228,264,k2);
+h+=grp('QF1',36,46,144,92,'QF1 MCCB',150,72)+grp('KM1',36,128,144,172,'KM1',38,122)+grp('KM2',176,128,284,172,'KM2',178,122)+grp('OL1',36,194,144,232,'OL1',38,190)+grp('OL2',176,194,284,232,'OL2',178,190)+mot(90,296,0,'M1')+mot(230,296,1,'M2');
+return['0 0 300 340',h]}
+
+function pYD(){var X=[60,110,160],k=C.KM1?2:0,q=qf?1:0,on=C.KM1&&(C.KM2||C.KM3),w=on?2:0,d=C.KM2?2:0,h=lbl(X);
+h+=wires(X,22,52,1)+blade(X,52,88,qf)+wires(X,88,118,q)+blade(X,118,150,C.KM1)+wires(X,150,172,k)+olb(X,172,204)+wires(X,204,240,k);
+['U','V','W'].forEach(function(n,i){var x=X[i];h+='<rect x="'+(x-9)+'" y="240" width="18" height="44" rx="4" fill="'+(on?'#0d3a35':'#0d3156')+'" stroke="'+(on?'#35e08a':'#cfe3f6')+'" stroke-width="2"/><text class="m" x="'+(x+6)+'" y="226">'+n+'1</text><text class="m" x="'+(x+6)+'" y="308">'+n+'2</text>'});
+h+=wires(X,284,296,w)+wires(X,296,322,C.KM3?2:0)+L(60,322,160,322,C.KM3?2:0);
+h+=L(60,296,110,236,d)+L(110,296,160,236,d)+L(160,296,190,296,d)+L(190,296,190,222,d)+L(190,222,30,222,d)+L(30,222,30,236,d)+L(30,236,60,236,d);
+h+=grp('QF1',46,46,174,94,'QF1 MCCB',180,74)+grp('KM1',46,112,174,156,'KM1 Contactor',180,138)+grp('OL1',46,168,174,208,'OL1',180,190)+grp('KM3',46,300,174,334,'KM3 Star',180,322)+grp('KM2',194,246,262,268,'KM2 Delta',198,261)+mot(255,196,0,'M1');
+return['0 0 300 345',h]}
+
+function el(e,cx,y,si,so,c,pos){var cl=c?'sym on':'sym',h=L(cx-15,y,cx-8,y,si)+L(cx+8,y,cx+15,y,so);
+h+='<line class="'+cl+'" x1="'+(cx-7)+'" y1="'+(y-9)+'" x2="'+(cx-7)+'" y2="'+(y+9)+'"/><line class="'+cl+'" x1="'+(cx+7)+'" y1="'+(y-9)+'" x2="'+(cx+7)+'" y2="'+(y+9)+'"/>';
+if(c)h+='<line class="sym on" x1="'+(cx-7)+'" y1="'+y+'" x2="'+(cx+7)+'" y2="'+y+'"/>';
+if(e.ty=='nc')h+='<line class="'+cl+'" x1="'+(cx-10)+'" y1="'+(y+9)+'" x2="'+(cx+10)+'" y2="'+(y-9)+'"/>';
+h+='<text text-anchor="middle" x="'+cx+'" y="'+(pos=='b'?y+22:y-14)+'">'+e.lb+'</text>';
+h+='<text class="m" text-anchor="middle" x="'+cx+'" y="'+(pos=='b'?y+33:y+24)+'">'+e.tm+'</text>';
+return h+'<rect class="cmp'+(sel==e.id?' sel':'')+'" data-id="'+e.id+'" x="'+(cx-17)+'" y="'+(y-12)+'" width="34" height="24" rx="5" tabindex="0" role="button" aria-label="'+e.lb+'"/>'}
+
+function coil(co,cx,cy,en){return '<rect x="'+(cx-16)+'" y="'+(cy-14)+'" width="32" height="28" rx="6" fill="'+(en?'#1e9e5a':'#0d3156')+'" stroke="#cfe3f6" stroke-width="2"/><text text-anchor="middle" x="'+cx+'" y="'+(cy+4)+'" style="font-weight:700">'+co+'</text><text class="m" text-anchor="middle" x="'+cx+'" y="'+(cy+28)+'">A1-A2</text><rect class="cmp'+(sel==co?' sel':'')+'" data-id="'+co+'" x="'+(cx-16)+'" y="'+(cy-14)+'" width="32" height="28" rx="6" tabindex="0" role="button" aria-label="Koil '+co+'"/>'}
+
+function ladder(m){var rows='',y=30,RL=20,RR=304,CX=56,DX=54,CC=270;
+m.rungs.forEach(function(r,ri){
+var hp=r.els.some(function(e){return e.par}),cy=y+28,all=qf&&r.els.every(cond),rc=!!qf,px=RL;
+rows+='<text class="m" x="1" y="'+(cy+3)+'">R'+(ri+1)+'</text>';
+r.els.forEach(function(e,k){var cx=CX+k*DX,s=rc?(all?2:1):0;
+rows+=L(px,cy,cx-15,cy,s);
+if(e.par){var cc=[cond(e.par[0]),cond(e.par[1])],an=cc[0]||cc[1],so=(rc&&an)?(all?2:1):0;
+rows+=L(cx-15,cy,cx-15,cy+30,s)+L(cx+15,cy,cx+15,cy+30,so);
+e.par.forEach(function(p,j){rows+=el(p,cx,cy+30*j,s,(rc&&cc[j])?(all?2:1):0,cc[j],j?'b':'t')});
+rc=rc&&an}
+else{var c=cond(e);rows+=el(e,cx,cy,s,(rc&&c)?(all?2:1):0,c,'s');rc=rc&&c}
+px=cx+15});
+rows+=L(px,cy,CC-16,cy,rc?(all?2:1):0)+coil(r.coil,CC,cy,!!C[r.coil])+L(CC+16,cy,RR,cy,all?2:0);
+y+=hp?96:68});
+var h='<text x="8" y="14">+24V / 220V</text><text x="276" y="14">0V</text>'+L(RL,22,RL,y-8,qf?1:0)+L(RR,22,RR,y-8,0);
+return['0 0 320 '+y,h+rows]}
+
+var CP={QF1:['QF1','MCCB / Circuit Breaker','Saklar utama dan pengaman hubung singkat daya motor.','L1-L2-L3 / T1-T2-T3'],
+KM1:['KM1','Contactor','Kontak utama menyambung daya ke motor; kontak bantu 13-14 untuk holding. Koil A1-A2.','1-3-5 / 2-4-6 · 13-14 · A1-A2'],
+OL1:['OL1','Overload relay','Memutus rangkaian kontrol saat arus berlebih. 95-96 (NC) di kontrol, 97-98 (NO) untuk alarm.','95-96 (NC) · 97-98 (NO)'],
+S0:['S0','Stop button (NC)','Memutus koil sehingga motor berhenti.','1-2'],
+S1:['S1','Start button (NO)','Memberi tegangan ke koil kontaktor.','3-4'],
+M1:['M1','Motor induksi 3 fasa','Penggerak pompa / mesin geladak.','U1-V1-W1']};
+function cp(ids,extra){var o=[];ids.forEach(function(i){var c=(extra&&extra[i])||CP[i];o.push([i].concat(c))});return o}
+var BS0=function(){return bt('S0','nc','S0 STOP','1-2')};
+
+MD.dol={nm:'DOL',n:1,delay:0,ols:['OL1'],
+desc:'DOL (Direct On Line): motor langsung disambung ke tegangan penuh. Paling sederhana, dipakai untuk motor kecil-menengah di kapal: bilge pump, cooling water pump, fuel transfer pump, HVAC fan, purifier.',
+btn:[['S1','START','b-start'],['S0','STOP','b-stop']],
+rungs:[{coil:'KM1',els:[BS0(),pr(bt('S1','no','S1 START','3-4'),kc('KM1','no','13-14')),ol('OL1')]}],
+comps:cp(['QF1','KM1','OL1','S0','S1','M1']),
+steps:[['Tekan START (S1) → koil KM1 energize (A1-A2)',function(){return P.S1||C.KM1}],['Kontak utama KM1 menutup → L1-L2-L3 tersambung ke motor',function(){return C.KM1}],['Kontak bantu 13-14 menutup → holding circuit aktif',function(){return C.KM1}],['Lepas START → KM1 tetap energized',function(){return C.KM1&&!P.S1}],['Jika OL trip → 95-96 open → KM1 OFF, 97-98 close (alarm)',trip,1]],
+pw:pDOL,mot:function(){return[{on:C.KM1,t:1450,f:1}]},ex:function(){return''}};
+
+MD.yd={nm:'Star-Delta',n:1,delay:4,ols:['OL1'],
+desc:'Star-Delta (Y-Δ): belitan dihubung Bintang dulu agar arus start turun ±1/3 DOL, lalu timer KT memindah ke Segitiga. Cocok untuk air compressor, pompa dan fan besar. Syarat: motor 6 terminal dan tegangan belitan Δ = tegangan jala-jala.',
+btn:[['S1','START','b-start'],['S0','STOP','b-stop']],
+rungs:[
+{coil:'KM1',els:[BS0(),pr(bt('S1','no','S1 START','3-4'),kc('KM1','no','13-14')),ol('OL1')]},
+{coil:'KM3',els:[kc('KM1','no','13-14'),kc('KM2','nc','21-22'),tc('nc','55-56')]},
+{coil:'KT',els:[kc('KM1','no','13-14'),kc('KM2','nc','21-22')]},
+{coil:'KM2',els:[kc('KM1','no','13-14'),kc('KM3','nc','21-22'),pr(tc('no','67-68'),kc('KM2','no','13-14'))]}],
+comps:cp(['QF1','KM1','KM2','KM3','KT','OL1','S0','S1','M1'],{
+KM1:['KM1','Kontaktor utama','Menyambung supply ke terminal U1-V1-W1 selama motor berjalan.','1-3-5 / 2-4-6 · A1-A2'],
+KM2:['KM2','Kontaktor Delta','Menghubungkan U2-V1, V2-W1, W2-U1 (segitiga) untuk jalan normal.','1-3-5 / 2-4-6 · A1-A2'],
+KM3:['KM3','Kontaktor Star','Menghubung singkat U2-V2-W2 (bintang) saat start. Interlock dengan KM2.','1-3-5 / 2-4-6 · A1-A2'],
+KT:['KT','Timer on-delay','Setelah 4 detik: kontak NC (55-56) terbuka dan NO (67-68) tertutup.','A1-A2 · 55-56 · 67-68'],
+M1:['M1','Motor 3 fasa, 6 terminal','Belitan U1-U2, V1-V2, W1-W2. Bintang saat start, segitiga saat jalan.','U1 V1 W1 / U2 V2 W2']}),
+steps:[['START → KM1 (utama) + KM3 (star) + timer KT energize',function(){return C.KM1}],['Motor start bintang: arus ±1/3 DOL',function(){return C.KM3}],['Timer KT habis (4 detik) → KM3 lepas',function(){return td||C.KM2}],['KM2 (delta) menutup → tegangan penuh, kecepatan normal',function(){return C.KM2}],['OL1 trip → semua kontaktor OFF',trip,1]],
+pw:pYD,mot:function(){return[{on:C.KM1&&(C.KM2||C.KM3),t:C.KM2?1450:960,f:C.KM2?1:1/3}]},
+ex:function(){return'Hubungan belitan: '+(C.KM2?'SEGITIGA (\u0394)':C.KM3?'BINTANG (Y)':'-')}};
+
+MD.fr={nm:'Fwd-Rev',n:1,delay:0,ols:['OL1'],
+desc:'Forward-Reverse: arah putar dibalik dengan menukar dua fasa (L2↔L3). Interlock kontak NC KM1/KM2 mencegah hubung singkat antar fasa. Dipakai untuk windlass, mooring winch, deck crane. Tekan STOP dulu sebelum membalik arah.',
+btn:[['S1','FWD','b-start'],['S2','REV','b-on'],['S0','STOP','b-stop']],
+rungs:[
+{coil:'KM1',els:[BS0(),pr(bt('S1','no','S1 FWD','3-4'),kc('KM1','no','13-14')),kc('KM2','nc','21-22'),ol('OL1')]},
+{coil:'KM2',els:[BS0(),pr(bt('S2','no','S2 REV','5-6'),kc('KM2','no','13-14')),kc('KM1','nc','21-22'),ol('OL1')]}],
+comps:cp(['QF1','KM1','KM2','OL1','S0','S1','S2','M1'],{
+KM1:['KM1','Kontaktor Forward','Menyambung L1-L2-L3 ke motor (putaran maju). NC 21-22 sebagai interlock KM2.','1-3-5 / 2-4-6 · 13-14 · 21-22'],
+KM2:['KM2','Kontaktor Reverse','Menukar L2↔L3 sehingga putaran terbalik. NC 21-22 sebagai interlock KM1.','1-3-5 / 2-4-6 · 13-14 · 21-22'],
+S2:['S2','Reverse button (NO)','Memberi tegangan ke koil KM2 (arah mundur).','5-6']}),
+steps:[['Tekan S1 (FWD) → KM1 energize, motor maju',function(){return C.KM1}],['Kontak NC KM1 membuka → KM2 terkunci (interlock)',function(){return C.KM1}],['Tekan STOP → KM1 lepas, motor berhenti',function(){return qf&&!C.KM1&&!C.KM2}],['Tekan S2 (REV) → KM2 menukar L2↔L3, putaran terbalik',function(){return C.KM2}],['OL1 trip → KM1/KM2 OFF',trip,1]],
+pw:pFR,mot:function(){return[{on:C.KM1||C.KM2,t:C.KM1?1450:-1450,f:1}]},
+ex:function(){return'Arah putar: '+(rpm[0]>20?'FORWARD':rpm[0]<-20?'REVERSE':'-')}};
+
+MD.seq={nm:'Sequence 2 Motor',n:2,delay:3,ols:['OL1','OL2'],
+desc:'Sequence start: Motor 2 hanya boleh jalan setelah Motor 1 jalan dan timer habis (mis. lube oil pump dulu, baru fan/pompa utama). Jika M1 berhenti atau OL1 trip, M2 ikut mati.',
+btn:[['S1','START','b-start'],['S0','STOP','b-stop']],
+rungs:[
+{coil:'KM1',els:[BS0(),pr(bt('S1','no','S1 START','3-4'),kc('KM1','no','13-14')),ol('OL1')]},
+{coil:'KT',els:[kc('KM1','no','13-14')]},
+{coil:'KM2',els:[kc('KM1','no','13-14'),pr(tc('no','67-68'),kc('KM2','no','13-14')),ol('OL2')]}],
+comps:cp(['QF1','KM1','KM2','KT','OL1','OL2','S0','S1','M1','M2'],{
+KM1:['KM1','Kontaktor Motor 1','Menjalankan Motor 1 dan memberi izin (interlock) untuk Motor 2.','1-3-5 / 2-4-6 · 13-14 · A1-A2'],
+KM2:['KM2','Kontaktor Motor 2','Jalan setelah KM1 aktif dan timer KT habis.','1-3-5 / 2-4-6 · 13-14 · A1-A2'],
+KT:['KT','Timer on-delay','Menunda start Motor 2 selama 3 detik.','A1-A2 · 67-68'],
+OL2:['OL2','Overload relay M2','Proteksi Motor 2.','95-96 (NC) · 97-98 (NO)'],
+M1:['M1','Motor 1','Motor pertama (mis. lube oil pump).','U1-V1-W1'],
+M2:['M2','Motor 2','Motor kedua (mis. fan / pompa utama).','U1-V1-W1']}),
+steps:[['START → KM1 energize, Motor 1 jalan',function(){return C.KM1}],['Timer KT mulai menghitung (3 detik)',function(){return C.KT}],['Kontak KT menutup → KM2 energize',function(){return td||C.KM2}],['Motor 2 jalan setelah Motor 1',function(){return C.KM2}],['OL1/OL2 trip → motor terkait OFF',trip,1]],
+pw:pSEQ,mot:function(){return[{on:C.KM1,t:1450,f:1},{on:C.KM2,t:1450,f:1}]},
+ex:function(){return'M1: '+(C.KM1?'RUN':'OFF')+' · M2: '+(C.KM2?'RUN':'OFF')}};
+
+function ev(m){for(var i=0;i<8;i++){var ch=0;m.rungs.forEach(function(r){var v=qf&&r.els.every(cond);if(!!C[r.coil]!=v){C[r.coil]=v;ch=1}});if(!ch)break}}
+function lg(t){var l=$('log');l.innerHTML+=t+'<br>';l.scrollTop=l.scrollHeight}
+function render(){var m=MD[mode],s=JSON.stringify([mode,qf,C,P,T,td,sel]);if(s==sig)return;sig=s;
+var a=m.pw();$('pw').setAttribute('viewBox',a[0]);$('pw').innerHTML=a[1];
+var b=ladder(m);$('ct').setAttribute('viewBox',b[0]);$('ct').innerHTML=b[1];
+hot=document.querySelectorAll('svg .hot');
+var li=$('steps').children;m.steps.forEach(function(st,i){li[i].className=st[1]()?(st[2]?'bad':'on'):''});
+document.querySelectorAll('tr.r').forEach(function(r){r.className='r'+(r.getAttribute('data-id')==sel?' sel':'')})}
+function gauges(){var m=MD[mode],i,A=[],R=[];for(i=0;i<m.n;i++){A.push(cur[i].toFixed(1));R.push(Math.round(Math.abs(rpm[i])))}
+$('vV').textContent=qf?'400 V':'0 V';$('vA').textContent=A.join(' | ')+' A';$('vR').textContent=R.join(' | ')+' rpm';
+var run=m.mot().some(function(o){return o.on}),s=$('st');
+if(trip()){s.textContent='TRIP';s.className='badge s-trip'}else if(run){s.textContent='RUN';s.className='badge s-run'}else if(qf){s.textContent='STOP';s.className='badge s-stop'}else{s.textContent='OFF';s.className='badge s-off'}
+$('ex').textContent=m.ex()+(m.delay?(' · Timer KT: '+(td?m.delay:Math.min(te/1000,m.delay)).toFixed(1)+' / '+m.delay+' s'):'');
+$('tw').style.display=m.delay?'block':'none';$('tbar').style.width=(m.delay?Math.min(100,(td?m.delay*1000:te)/(m.delay*10)):0)+'%';
+$('bQ').textContent='QF1: '+(qf?'ON':'OFF');
+$('lpP').className='lp'+(qf?' y':'');$('lpR').className='lp'+(run&&!trip()?' g':'');$('lpT').className='lp'+(trip()?' r':'');
+document.querySelectorAll('[data-b]').forEach(function(b){b.classList.toggle('held',!!P[b.getAttribute('data-b')])})}
+function step(){ev(MD[mode]);render();gauges()}
+function tick(){if(!$('ctl').offsetParent){last=performance.now();return}var n=performance.now(),dt=Math.min(n-last,250);last=n;var m=MD[mode];
+if(C.KT){te+=dt;if(!td&&te>=m.delay*1000)td=true}else{te=0;td=false}
+ev(m);var mt=m.mot();
+for(var i=0;i<m.n;i++){var o=mt[i],tg=o.on?o.t:0;rpm[i]+=(tg-rpm[i])*(1-Math.exp(-dt/(o.on?600:1800)));if(!o.on&&Math.abs(rpm[i])<4)rpm[i]=0;
+cur[i]=o.on?o.f*(12.5+62*Math.min(1.6,Math.abs(tg-rpm[i])/1450)):0}
+render();gauges()}
+var lt=0;
+function raf(t){var dt=(t-lt)/1000;lt=t;if(dt>.2)dt=.016;var ph=(t/1000*38)%12,i,g;
+for(i=0;i<hot.length;i++)hot[i].setAttribute('stroke-dashoffset',-ph);
+for(i=0;i<2;i++){g=$('mr'+i);if(g){ang[i]=(ang[i]+rpm[i]/1450*420*dt)%360;g.setAttribute('transform','rotate('+ang[i].toFixed(1)+' '+g.getAttribute('data-cx')+' '+g.getAttribute('data-cy')+')')}}
+requestAnimationFrame(raf)}
+function pick(id){sel=id;var c=MD[mode].comps.filter(function(x){return x[0]==id})[0];
+if(c)$('info').innerHTML='<b>'+c[1]+'</b> – '+c[2]+': '+c[3]+'<br><span class="mu">Terminal: '+c[4]+'</span>';sig='';step()}
+function bn(id){var r=id;MD[mode].btn.forEach(function(b){if(b[0]==id)r=b[1]});return r}
+function bindB(){document.querySelectorAll('[data-b]').forEach(function(el){var id=el.getAttribute('data-b'),tm=0,t0=0;
+function dn(){if(!qf){lg('QF1 masih OFF – nyalakan dulu');return}clearTimeout(tm);P[id]=1;t0=performance.now();lg('Tekan '+id+' ('+bn(id)+')');step();
+if(mode=='fr'&&id=='S2'&&C.KM1)lg('REV ditolak: interlock KM1 aktif, tekan STOP dulu');
+if(mode=='fr'&&id=='S1'&&C.KM2)lg('FWD ditolak: interlock KM2 aktif, tekan STOP dulu')}
+function up(){if(!P[id])return;tm=setTimeout(function(){P[id]=0;lg('Lepas '+id);step()},Math.max(0,450-(performance.now()-t0)))}
+el.addEventListener('pointerdown',function(e){e.preventDefault();dn()});
+['pointerup','pointerleave','pointercancel'].forEach(function(n){el.addEventListener(n,up)});
+el.addEventListener('keydown',function(e){if((e.key==' '||e.key=='Enter')&&!e.repeat){e.preventDefault();dn()}});
+el.addEventListener('keyup',up)});
+document.querySelectorAll('[data-t]').forEach(function(el){el.onclick=function(){var n=el.getAttribute('data-t'),m=MD[mode];
+var run=mode=='seq'?(n=='OL1'?C.KM1:C.KM2):(C.KM1||C.KM2);
+if(!run){lg('Motor belum jalan – overload hanya bisa disimulasikan saat motor jalan');return}
+T[n]=true;lg(n+' TRIP: 95-96 open → koil OFF, 97-98 close (alarm)');step()}});
+$('bR').onclick=function(){if(trip()){T={};lg('Overload di-reset. Siap START kembali')}else lg('Overload normal');step()};
+$('bQ').onclick=function(){qf=!qf;if(!qf){P={};C={};te=0;td=false;lg('QF1 OFF – daya dan kontrol terputus')}else lg('QF1 ON – tegangan tersedia');step()}}
+function build(){var m=MD[mode],h='<button class="b-on" id="bQ">QF1: OFF</button>';
+m.btn.forEach(function(b){h+='<button class="'+b[2]+'" data-b="'+b[0]+'">'+b[1]+' ('+b[0]+')</button>'});
+m.ols.forEach(function(o){h+='<button class="b-trip" data-t="'+o+'">Overload '+o+'</button>'});
+h+='<button class="b-rst" id="bR" style="grid-column:1/-1">Reset Overload</button>';
+$('ctl').innerHTML=h;bindB();
+$('desc').textContent=m.desc;
+$('steps').innerHTML=m.steps.map(function(s,i){return '<li>'+(i+1)+'. '+s[0]+'</li>'}).join('');
+$('tbd').innerHTML=m.comps.map(function(c,i){return '<tr class="r" data-id="'+c[0]+'"><td>'+(i+1)+'</td><td>'+c[1]+'</td><td>'+c[2]+'</td><td>'+c[4]+'</td></tr>'}).join('');
+document.querySelectorAll('tr.r').forEach(function(r){r.onclick=function(){pick(r.getAttribute('data-id'))}});
+$('info').textContent='Pilih komponen untuk melihat fungsi dan terminalnya.';
+document.querySelectorAll('#tabs button').forEach(function(b){b.className=b.getAttribute('data-m')==mode?'act':''})}
+function setMode(k){mode=k;qf=true;P={};C={};T={};te=0;td=false;rpm=[0,0];cur=[0,0];sel='';sig='';$('log').innerHTML='';build();lg('Mode '+MD[k].nm+': panel sudah hidup (QF1 ON). Tekan tombol START untuk menjalankan motor.');step()}
+$('tabs').innerHTML=Object.keys(MD).map(function(k){return '<button role="tab" data-m="'+k+'">'+MD[k].nm+'</button>'}).join('');
+document.querySelectorAll('#tabs button').forEach(function(b){b.onclick=function(){setMode(b.getAttribute('data-m'))}});
+['pw','ct'].forEach(function(i){var s=$(i);
+s.addEventListener('click',function(e){var t=e.target.closest('.cmp');if(t)pick(t.getAttribute('data-id'))});
+s.addEventListener('keydown',function(e){if(e.key=='Enter'||e.key==' '){var t=e.target.closest('.cmp');if(t){e.preventDefault();pick(t.getAttribute('data-id'))}}})});
+setMode('dol');
+setInterval(tick,80);requestAnimationFrame(raf);
+window.SIM={setMode:setMode,mode:function(){return mode}};
+})();
+
+/* =====================================================================
+   4. RENDERING BANK SOAL, PETA LINGKUP, REFERENSI, POPUP
+   ===================================================================== */
+(function(){
+var $=function(i){return document.getElementById(i)};
+var SKEY='essDone_v1',DONE={};
+try{DONE=JSON.parse(localStorage.getItem(SKEY)||'{}')||{}}catch(e){DONE={}}
+function saveDone(){try{localStorage.setItem(SKEY,JSON.stringify(DONE))}catch(e){}}
+
+/* ---- Popup ---- */
+var modal=$('modal'),mBody=$('mBody'),mBk=$('mBk'),mX=$('mX');
+function enc(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function openPop(html){mBody.innerHTML=html;modal.hidden=false;document.documentElement.classList.add('lock');mX.focus();}
+function closePop(){modal.hidden=true;document.documentElement.classList.remove('lock')}
+mX.onclick=closePop;mBk.onclick=closePop;
+document.addEventListener('keydown',function(e){if(e.key=='Escape'&&!modal.hidden)closePop()});
+
+function linksBlock(kw,title){
+  var h='<div class="lkh">'+title+'</div><div class="lk">';
+  SRC.forEach(function(s){h+='<a target="_blank" rel="noopener noreferrer" href="'+s.u+encodeURIComponent(kw)+'">'+s.nm+'</a>'});
+  h+='</div>';return h}
+
+function showSoal(n){
+  var q=SOAL.filter(function(x){return x.n==n})[0];if(!q)return;
+  var cat=CATS.filter(function(c){return c.id==q.c})[0]||{nm:'Umum',no:''};
+  var h='<p class="mk">Soal '+q.n+' · '+enc(cat.no?('Kategori '+cat.no+' — '):'')+enc(cat.nm)+'</p>';
+  h+='<h3 class="mt" id="mTitle">'+enc(q.q)+'</h3>';
+  h+='<div class="tags">'+q.t.map(function(t){return '<span class="tag">'+enc(TAGS[t]||t)+'</span>'}).join('')+
+     (q.s&&q.s.length?q.s.map(function(s){return '<span class="tag">Simulator: '+enc(SIMN[s]||s)+'</span>'}).join(''):'')+'</div>';
+  h+='<div class="mb"><div><div class="mh">Alur singkat</div><div class="flow">'+enc(q.f)+'</div></div>';
+  h+='<div><div class="mh">Uraian</div><p>'+enc(q.a).replace(/\n/g,'<br>')+'</p></div>';
+  if(q.p&&q.p.length)h+='<div><div class="mh">Submateri</div><ul class="pts">'+q.p.map(function(p){return '<li>'+enc(p)+'</li>'}).join('')+'</ul></div>';
+  h+='</div>';
+  h+=linksBlock(q.k||q.q,'Cari referensi');
+  h+='<div class="mf"><label class="chk"><input type="checkbox" id="doneChk" '+(DONE[q.n]?'checked':'')+'> Sudah dipelajari</label><div class="mnav">'+
+     '<button class="btn sm" id="prevSoal">← Sebelumnya</button><button class="btn sm" id="nextSoal">Berikutnya →</button></div></div>';
+  openPop(h);
+  $('doneChk').onchange=function(){if(this.checked)DONE[q.n]=1;else delete DONE[q.n];saveDone();renderProg();renderSoal()};
+  $('prevSoal').onclick=function(){var i=SOAL.map(function(x){return x.n}).indexOf(q.n);if(i>0)showSoal(SOAL[i-1].n)};
+  $('nextSoal').onclick=function(){var i=SOAL.map(function(x){return x.n}).indexOf(q.n);if(i>=0&&i<SOAL.length-1)showSoal(SOAL[i+1].n)};
+}
+window.showSoal=showSoal;
+
+/* ---- Bank soal ---- */
+var state={cat:'all',q:''};
+var qList=$('qList'),catChips=$('catChips');
+function renderChips(){
+  var h='<button class="chip" data-c="all" aria-pressed="'+(state.cat=='all')+'">Semua (90)</button>';
+  CATS.forEach(function(c){
+    var n=SOAL.filter(function(x){return x.c==c.id}).length;if(!n)return;
+    h+='<button class="chip" data-c="'+c.id+'" aria-pressed="'+(state.cat==c.id)+'">'+enc(c.no)+' · '+enc(c.nm)+' ('+n+')</button>'});
+  catChips.innerHTML=h;
+  catChips.querySelectorAll('.chip').forEach(function(b){b.onclick=function(){state.cat=b.getAttribute('data-c');renderChips();renderSoal()}});
+}
+function renderProg(){
+  var total=SOAL.length,done=Object.keys(DONE).length;
+  $('prog').textContent='Dipelajari: '+done+' / '+total+' soal'+(done?' · '+Math.round(done/total*100)+'%':'');
+}
+function renderSoal(){
+  var arr=SOAL.slice();
+  if(state.cat!='all')arr=arr.filter(function(x){return x.c==state.cat});
+  if(state.q){var s=state.q.toLowerCase();arr=arr.filter(function(x){return (x.q+' '+x.a+' '+x.f+' '+(x.p||[]).join(' ')).toLowerCase().indexOf(s)>=0})}
+  qList.innerHTML='';
+  if(!arr.length){qList.innerHTML='<p class="empty">Tidak ada soal yang cocok dengan pencarian.</p>';return}
+  var byCat={};
+  arr.forEach(function(x){if(!byCat[x.c])byCat[x.c]=[];byCat[x.c].push(x)});
+  CATS.forEach(function(c){
+    if(!byCat[c.id])return;
+    var wrap=document.createElement('div');wrap.className='cat';
+    wrap.innerHTML='<h3>'+enc(c.no)+' · '+enc(c.nm)+'</h3><span>'+byCat[c.id].length+' soal</span>';
+    var g=document.createElement('div');g.className='qgrid';
+    byCat[c.id].forEach(function(x){
+      var b=document.createElement('button');b.className='qcard'+(DONE[x.n]?' isdone':'');b.type='button';
+      b.innerHTML='<span class="qn">'+x.n+'.</span><span class="qt">'+enc(x.q)+'</span>'+
+        '<span class="qm">'+x.t.map(function(t){return '<span>'+enc(TAGS[t]||t)+'</span>'}).join(' · ')+
+        (x.s&&x.s.length?' · <span>Sim: '+x.s.map(function(s){return enc(SIMN[s]||s)}).join(', ')+'</span>':'')+'</span>';
+      b.onclick=function(){showSoal(x.n)};
+      g.appendChild(b);
+    });
+    wrap.appendChild(g);qList.appendChild(wrap);
+  });
+}
+$('qSearch').addEventListener('input',function(){state.q=this.value.trim();renderSoal()});
+
+/* ---- Soal simulator & tutorial ---- */
+function fillSimSoal(){
+  var c=$('simSoal');if(!c)return;
+  c.innerHTML=SOAL.filter(function(x){return x.s&&x.s.length}).map(function(x){
+    return '<button class="chip" data-n="'+x.n+'">'+x.n+'. '+enc(x.q.slice(0,60))+(x.q.length>60?'…':'')+'</button>'}).join('');
+  c.querySelectorAll('.chip').forEach(function(b){b.onclick=function(){showSoal(+b.getAttribute('data-n'))}});
+}
+function fillTutList(){
+  var c=$('tutList');if(!c)return;
+  c.innerHTML=SOAL.filter(function(x){return x.c=='tut'}).map(function(x){
+    return '<button class="qcard'+(DONE[x.n]?' isdone':'')+'" data-n="'+x.n+'"><span class="qn">'+x.n+'.</span><span class="qt">'+enc(x.q)+'</span></button>'}).join('');
+  c.querySelectorAll('.qcard').forEach(function(b){b.onclick=function(){showSoal(+b.getAttribute('data-n'))}});
+}
+
+/* ---- Peta lingkup ---- */
+var SCOPE=[
+{nm:'Propulsi & Main Engine',d:'Sistem yang menggerakkan kapal: Main Engine dan bantuannya.',
+ ask:['Power: dari mana motor bantu Main Engine disuplai dan bagaimana proteksinya?','Control: bagaimana urutan start dan pengaturan putaran dikendalikan?','Safety: shutdown apa yang melindungi engine dan siapa yang boleh reset?'],
+ kw:'marine main engine propulsion electrical auxiliary'},
+{nm:'Generating Plant & Switchboard',d:'Diesel generator, MSB, ACB, AVR, sinkronisasi, load sharing.',
+ ask:['Power: bagaimana daya dibangkitkan dan dibagi ke seluruh kapal?','Control: bagaimana PMS dan syncronizing bekerja?','Safety: proteksi apa yang melindungi generator?'],
+ kw:'marine diesel generator main switchboard AVR sync'},
+{nm:'Boiler & Steam System',d:'Auxiliary boiler, exhaust gas economizer, kontrol pembakaran.',
+ ask:['Power: beban listrik apa yang ada di boiler?','Control: bagaimana burner control panel mengatur urutan start?','Safety: proteksi low water, flame failure, dan high pressure bekerja bagaimana?'],
+ kw:'marine auxiliary boiler burner control flame failure'},
+{nm:'Purifier (Fuel & Lube Oil)',d:'Separator minyak dengan bowl berputar, heater, dan sludge discharge.',
+ ask:['Power: mengapa purifier butuh starter khusus?','Control: bagaimana timer sludge discharge diatur?','Safety: alarm dan proteksi apa yang melindungi purifier?'],
+ kw:'marine purifier fuel oil separator sludge discharge'},
+{nm:'Compressed Air',d:'Kompresor udara untuk start Main Engine dan service air.',
+ ask:['Power: starter apa yang dipakai kompresor besar?','Control: bagaimana pressure switch dan unloader bekerja?','Safety: proteksi apa yang mencegah overpressure?'],
+ kw:'marine air compressor unloader pressure switch safety'},
+{nm:'Pumps & Engine Room',d:'Pompa bilge, ballast, fire, cooling, transfer, dan pompa standby.',
+ ask:['Power: bagaimana pompa digerakkan dan diproteksi?','Control: bagaimana pompa standby start otomatis?','Safety: proteksi dry run dan flow switch bekerja bagaimana?'],
+ kw:'marine engine room pumps standby auto start protection'},
+{nm:'Deck Machinery',d:'Windlass, mooring winch, deck crane, hatch cover.',
+ ask:['Power: mengapa banyak menggunakan FWD/REV starter?','Control: bagaimana handle control dan limit switch bekerja?','Safety: interlock dan overload untuk mencegah beban berlebih?'],
+ kw:'marine deck machinery windlass winch crane FWD REV starter'},
+{nm:'Steering Gear',d:'Sistem kemudi electro-hydraulic, autopilot, rudder feedback.',
+ ask:['Power: bagaimana dua sirkuit dari MSB menyuplai steering?','Control: bagaimana follow-up dan non-follow-up bekerja?','Safety: mengapa overload hanya alarm dan bukan trip?'],
+ kw:'SOLAS II-1 steering gear electro hydraulic follow-up'},
+{nm:'Bridge & Navigation',d:'Gyro, magnetic compass, GPS, ECDIS, radar, AIS, VDR, BNWAS, GMDSS.',
+ ask:['Power: bagaimana peralatan anjungan disuplai dan ditopang UPS?','Control: bagaimana data NMEA dikirim antar peralatan?','Safety: apa yang terjadi saat blackout dan bagaimana pemulihannya?'],
+ kw:'marine bridge navigation gyro ECDIS radar AIS GMDSS'},
+{nm:'Accommodation & HVAC',d:'Lampu, stop kontak, air conditioning, galley, laundry.',
+ ask:['Power: bagaimana beban akomodasi disuplai dan mengapa bisa dilepas?','Control: bagaimana thermostat dan controller mengatur suhu?','Safety: proteksi kebakaran dan alarm di ruang akomodasi?'],
+ kw:'ship accommodation HVAC galley laundry electrical'},
+{nm:'LSA / FFA & Emergency',d:'Fire pump darurat, emergency generator, alarm, lifeboat, fire detection.',
+ ask:['Power: bagaimana sumber darurat menyuplai peralatan keselamatan?','Control: bagaimana fire detection dan alarm diintegrasikan?','Safety: apa prosedur uji berkala yang diwajibkan?'],
+ kw:'ship LSA FFA emergency generator fire detection SOLAS'},
+{nm:'Kelistrikan Umum & Distribusi',d:'MSB, ESB, MCC, distribution board, trafo, kabel, proteksi.',
+ ask:['Power: bagaimana alur daya dari generator ke beban?','Control: bagaimana breaker dan bus-tie dioperasikan?','Safety: bagaimana selektivitas proteksi dijaga?'],
+ kw:'marine electrical distribution MSB ESB MCC selectivity'}
+];
+function renderScope(){
+  var h='';
+  SCOPE.forEach(function(s){
+    h+='<div class="gbox"><h3>'+enc(s.nm)+'</h3><p>'+enc(s.d)+'</p><div class="lk"><button class="chip" data-kw="'+encodeURIComponent(s.kw)+'" data-nm="'+encodeURIComponent(s.nm)+'">Tanya tiga lensa & referensi</button></div></div>';
+  });
+  $('scopeList').innerHTML=h;
+  $('scopeList').querySelectorAll('button.chip').forEach(function(b){
+    b.onclick=function(){
+      var kw=decodeURIComponent(b.getAttribute('data-kw')),nm=decodeURIComponent(b.getAttribute('data-nm'));
+      var s=SCOPE.filter(function(x){return x.nm==nm})[0];
+      var h='<p class="mk">Peta lingkup</p><h3 class="mt" id="mTitle">'+enc(nm)+'</h3>';
+      h+='<div class="mb"><div><div class="mh">Tiga lensa</div><ul class="pts">'+s.ask.map(function(q){return '<li>'+enc(q)+'</li>'}).join('')+'</ul></div></div>';
+      h+=linksBlock(kw,'Cari referensi');
+      openPop(h);
+    }
+  });
+}
+
+/* ---- Referensi ---- */
+function renderRef(){
+  $('regList').innerHTML=[
+    {nm:'IMO',u:'https://www.imo.org/',d:'International Maritime Organization'},
+    {nm:'IACS',u:'https://iacs.org.uk/',d:'International Association of Classification Societies'},
+    {nm:'SOLAS',u:'https://www.imo.org/en/OurWork/Safety/Pages/International-Convention-for-the-Safety-of-Life-at-Sea-(SOLAS).aspx',d:'Safety of Life at Sea'},
+    {nm:'MARPOL',u:'https://www.imo.org/en/OurWork/Environment/Pages/Pollution-Prevention.aspx',d:'Marine Pollution Prevention'},
+    {nm:'STCW',u:'https://www.imo.org/en/OurWork/HumanElement/Pages/STCW-Convention.aspx',d:'Standards of Training, Certification and Watchkeeping'},
+    {nm:'ILO Maritime',u:'https://www.ilo.org/global/industries-and-sectors/shipping-ports-fisheries-inland-waterways/lang--en/index.htm',d:'Labour standards for seafarers'}
+  ].map(function(r){return '<a class="rlink" href="'+r.u+'" target="_blank" rel="noopener noreferrer"><b>'+enc(r.nm)+'</b><span>'+enc(r.d)+'</span></a>'}).join('');
+  $('clsList').innerHTML=CLS.map(function(r){return '<a class="rlink" href="'+r.u+'" target="_blank" rel="noopener noreferrer"><b>'+enc(r.nm)+'</b><span>Buka situs</span></a>'}).join('');
+}
+function renderQuickSearch(){
+  var kw=$('qs').value.trim()||'marine electrical motor starter';
+  $('qsLinks').innerHTML=SRC.map(function(s){return '<a target="_blank" rel="noopener noreferrer" href="'+s.u+encodeURIComponent(kw)+'">'+s.nm+'</a>'}).join('');
+}
+$('qs').addEventListener('input',renderQuickSearch);
+
+/* ---- Navigasi halaman ---- */
+function go(id,sim){
+  document.querySelectorAll('.page').forEach(function(p){p.hidden=(p.id!=='p-'+id)});
+  document.querySelectorAll('.nv').forEach(function(b){b.setAttribute('aria-current',b.getAttribute('data-go')==id?'page':'false')});
+  window.scrollTo({top:0,behavior:'auto'});
+  if(sim&&window.SIM)window.SIM.setMode(sim);
+}
+document.querySelectorAll('[data-go]').forEach(function(el){
+  el.addEventListener('click',function(){go(el.getAttribute('data-go'),el.getAttribute('data-sim'))});
+});
+
+/* ---- Inisialisasi ---- */
+renderChips();renderProg();renderSoal();fillSimSoal();fillTutList();renderScope();renderRef();renderQuickSearch();
+})();
+</script>
+</body>
+</html>
